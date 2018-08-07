@@ -11,4 +11,10 @@ namespace Num2Serial.Helper
         public static Color MAIN_BG = Color.FromArgb(254, 226, 187);
         public static Color COL_HEADER_BG = Color.FromArgb(209, 149, 109);
     }
+
+    public enum FORM_MODE
+    {
+        READ,
+        EDIT
+    }
 }

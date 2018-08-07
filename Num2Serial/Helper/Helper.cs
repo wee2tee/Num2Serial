@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Forms;
 
 namespace Num2Serial.Helper
 {
@@ -60,6 +62,36 @@ namespace Num2Serial.Helper
             }
 
             return path;
+        }
+
+        public static void SetControlState(this Component comp, FORM_MODE[] form_mode_to_enable, FORM_MODE form_mode)
+        {
+            if(form_mode_to_enable.Where(f => f == form_mode).Count() > 0)
+            {
+                if (comp is CheckBox)
+                    ((CheckBox)comp).Enabled = true;
+                if (comp is DataGridView)
+                    ((DataGridView)comp).Enabled = true;
+                if (comp is TextBox)
+                    ((TextBox)comp).Enabled = true;
+                if (comp is ComboBox)
+                    ((ComboBox)comp).Enabled = true;
+                if (comp is ToolStripButton)
+                    ((ToolStripButton)comp).Enabled = true;
+            }
+            else
+            {
+                if (comp is CheckBox)
+                    ((CheckBox)comp).Enabled = false;
+                if (comp is DataGridView)
+                    ((DataGridView)comp).Enabled = false;
+                if (comp is TextBox)
+                    ((TextBox)comp).Enabled = false;
+                if (comp is ComboBox)
+                    ((ComboBox)comp).Enabled = false;
+                if (comp is ToolStripButton)
+                    ((ToolStripButton)comp).Enabled = false;
+            }
         }
     }
 }

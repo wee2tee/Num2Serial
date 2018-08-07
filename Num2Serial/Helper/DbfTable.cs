@@ -73,7 +73,7 @@ namespace Num2Serial.Helper
                 var cmd = conn.CreateCommand();
                 if (only_new_invoice)
                 {
-                    cmd.CommandText = "Select artrn.docnum, artrn.docdat, artrn.cuscod, armas.cusnam From artrn ";
+                    cmd.CommandText = "Select artrn.docnum, artrn.docdat, artrn.cuscod, artrn.num2, armas.cusnam From artrn ";
                     cmd.CommandText += "Left Join armas On artrn.cuscod = armas.cuscod ";
                     cmd.CommandText += "Where artrn.docnum In ";
                     cmd.CommandText += "(Select stcrd.docnum From stcrd Left Join stmas On stcrd.stkcod=stmas.stkcod Left Join isacc On stmas.acccod=isacc.acccod Where isacc.method='X') ";
@@ -82,7 +82,7 @@ namespace Num2Serial.Helper
                 }
                 else
                 {
-                    cmd.CommandText = "Select artrn.docnum, artrn.docdat, artrn.cuscod, armas.cusnam From artrn ";
+                    cmd.CommandText = "Select artrn.docnum, artrn.docdat, artrn.cuscod, artrn.num2, armas.cusnam From artrn ";
                     cmd.CommandText += "Left Join armas On artrn.cuscod = armas.cuscod ";
                     cmd.CommandText += "Where artrn.docnum In ";
                     cmd.CommandText += "(Select stcrd.docnum From stcrd Left Join stmas On stcrd.stkcod=stmas.stkcod Left Join isacc On stmas.acccod=isacc.acccod Where isacc.method='X') ";
@@ -106,7 +106,8 @@ namespace Num2Serial.Helper
                         cuscod = !row.IsNull("cuscod") ? row["cuscod"].ToString().Trim() : string.Empty,
                         cusnam = !row.IsNull("cusnam") ? row["cusnam"].ToString().Trim() : string.Empty,
                         docnum = !row.IsNull("docnum") ? row["docnum"].ToString().Trim() : string.Empty,
-                        docdat = !row.IsNull("docdat") ? (DateTime?)row["docdat"] : null
+                        docdat = !row.IsNull("docdat") ? (DateTime?)row["docdat"] : null,
+                        warranty_spec = !row.IsNull("num2") ? ((double)row["num2"] > 0 ? "Y" : "") : ""
                     };
 
                     //Artrn a = new Artrn
@@ -293,7 +294,14 @@ namespace Num2Serial.Helper
                 }
 
                 cmd = conn.CreateCommand();
-                cmd.CommandText = "Select stcrd.tqucod, stcrd.disc, stcrd.docnum, stcrd.stkcod, stcrd.stkdes, stcrd.loccod, stcrd.trnqty, stcrd.trnval, stcrd.unitpr, isacc.method From stcrd Left Join stmas On stcrd.stkcod=stmas.stkcod Left Join isacc On stmas.acccod=isacc.acccod Where TRIM(docnum)='" + docnum + "' and isacc.method='X' Order By seqnum";
+                cmd.CommandText = "Select stcrd.tqucod, stcrd.disc, stcrd.docnum, stcrd.stkcod, stcrd.stkdes, stcrd.loccod, stcrd.trnqty, stcrd.trnval, stcrd.unitpr, stmas.warmonth, isacc.method, x.rem_remark as rem_remark From stcrd ";
+                cmd.CommandText += "Left Join stmas On stcrd.stkcod=stmas.stkcod ";
+                cmd.CommandText += "Left Join isacc On stmas.acccod=isacc.acccod ";
+                //cmd.CommandText += "Left Join (Select artrnrm.remark From artrnrm Where TRIM(docnum)='" + docnum + "' AND SUBSTRING(seqnum,1,1) != '@' AND (Select count(*) as cnt From artrnrm Where TRIM(docnum)='" + docnum + "' AND SUBSTRING(seqnum,1,1) != '@') = 15 Order By docnum DESC Limit 1) AS artrnrm On stcrd.docnum=artrnrm.docnum ";
+                //cmd.CommandText += "Left Join (Select artrnrm.remark From artrnrm Where SUBSTRING(seqnum,1,1) != '@' AND artrnrm.docnum IN (Select docnum, count(*) as cnt From artrnrm Where TRIM(docnum)='" + docnum + "' AND SUBSTRING(seqnum,1,1) != '@' HAVING cnt=15) Order By docnum DESC Limit 1) AS artrnrm On stcrd.docnum=artrnrm.docnum AND stcrd.seqnum=SUBSTR(artrnrm.seqnum,1,3) ";
+                cmd.CommandText += "Left Join (Select artrnrm.docnum as rem_docnum, artrnrm.seqnum as rem_seqnum, artrnrm.remark as rem_remark From artrnrm Where artrnrm.docnum='" + docnum + "' AND SUBSTR(artrnrm.seqnum,1,1)!='@' AND LOWER(SUBSTR(artrnrm.remark,1,4))='war.') AS x On x.rem_docnum=stcrd.docnum AND SUBSTR(x.rem_seqnum,1,3)=stcrd.seqnum ";
+                //cmd.CommandText += "Left Join artrnrm On artrnrm.docnum=stcrd.docnum AND SUBSTR(artrnrm.seqnum,1,3)=stcrd.seqnum ";
+                cmd.CommandText += "Where TRIM(stcrd.docnum)='" + docnum + "' and isacc.method='X' Order By stcrd.seqnum";
                 using (OleDbDataAdapter da = new OleDbDataAdapter(cmd))
                 {
                     dt.Clear();
@@ -313,7 +321,9 @@ namespace Num2Serial.Helper
                             trnqty = !dt.Rows[i].IsNull("trnqty") ? (double)dt.Rows[i]["trnqty"] : 0,
                             trnval = !dt.Rows[i].IsNull("trnval") ? (double)dt.Rows[i]["trnval"] : 0,
                             unitpr = !dt.Rows[i].IsNull("unitpr") ? (double)dt.Rows[i]["unitpr"] : 0,
-                            warranty_period = string.Empty
+                            warranty_default = !dt.Rows[i].IsNull("warmonth") ? Convert.ToInt32(dt.Rows[i]["warmonth"].ToString().Trim()) : 0,
+                            warranty_text = !dt.Rows[i].IsNull("rem_remark") ? dt.Rows[i]["rem_remark"].ToString() : string.Empty,
+                            warranty_period = 0
                         });
                     }
                 }
@@ -351,6 +361,7 @@ namespace Num2Serial.Helper
         public string docnum { get; set; }
         public string cuscod { get; set; }
         public string cusnam { get; set; }
+        public string warranty_spec { get; set; }
     }
 
     public class ArtrnDesc
@@ -379,7 +390,9 @@ namespace Num2Serial.Helper
         public double unitpr { get; set; }
         public string disc { get; set; }
         public double trnval { get; set; }
-        public string warranty_period { get; set; }
+        public string warranty_text { get; set; }
+        public int warranty_period { get; set; }
+        public int warranty_default { get; set; }
     }
 
     public class Invoice

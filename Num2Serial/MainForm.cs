@@ -21,6 +21,8 @@ namespace Num2Serial
         public Invoice curr_invoice = null;
         private BindingList<ArtrnMin> iv_list;
         private BindingList<ArtrnMin> hs_list;
+        private bool only_new_iv = true;
+        private FORM_MODE form_mode;
 
         public MainForm(string data_path = null)
         {
@@ -44,6 +46,8 @@ namespace Num2Serial
         {
             this.BackColor = Misc.MAIN_BG;
             this.dgvIV.ColumnHeadersDefaultCellStyle.BackColor = Misc.COL_HEADER_BG;
+            this.dgvHS.ColumnHeadersDefaultCellStyle.BackColor = Misc.COL_HEADER_BG;
+            this.dgvSTCRD.ColumnHeadersDefaultCellStyle.BackColor = Misc.COL_HEADER_BG;
 
             this.iv_list = new BindingList<ArtrnMin>();
             this.dgvIV.DataSource = this.iv_list;
@@ -57,6 +61,8 @@ namespace Num2Serial
                 Application.Exit();
                 return;
             }
+
+            this.ResetFormState(FORM_MODE.READ);
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -69,8 +75,9 @@ namespace Num2Serial
                     this.data_path = comp.selected_comp.RewriteDataPath();
                     this.lblDataPath.Text = this.data_path.TrimEnd('\\') + "   [" + comp.selected_comp.compnam + "]";
 
-                    this.iv_list =  new BindingList<ArtrnMin>(DbfTable.InvoiceList(this.data_path, true, DbfTable.INVOICE_TYPE.IV));
+                    this.iv_list =  new BindingList<ArtrnMin>(DbfTable.InvoiceList(this.data_path, this.only_new_iv, DbfTable.INVOICE_TYPE.IV));
                     this.dgvIV.DataSource = this.iv_list;
+                    this.tabIV.Text = "  ขายเชื่อ (" + this.iv_list.Count.ToString() + ")  ";
                 }
                 else
                 {
@@ -79,38 +86,19 @@ namespace Num2Serial
             }
         }
 
-        //public static DataTable Sccomp()
-        //{
-        //    //string secure_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName + @"\secure\";
+        private void ResetFormState(FORM_MODE form_mode)
+        {
+            this.form_mode = form_mode;
 
-        //    if (!(Directory.Exists(secure_path) && File.Exists(secure_path + "sccomp.dbf")))
-        //    {
-        //        XMessageBox.Show("ค้นหาแฟ้ม Sccomp.dbf ไม่พบ, อาจเป็นเพราะท่านติดตั้งโปรแกรมไว้ไม่ถูกที่ โปรแกรมนี้จะต้องถูกติดตั้งภายใต้โฟลเดอร์ของโปรแกรมเอ็กซ์เพรสเท่านั้น", "Error", MessageBoxButtons.OK, XMessageBoxIcon.Stop);
-        //        return new DataTable();
-        //    }
-
-
-        //    DataTable dt = new DataTable();
-
-        //    OleDbConnection conn = new OleDbConnection(
-        //        @"Provider=VFPOLEDB.1;Data Source=" + secure_path);
-
-        //    conn.Open();
-
-        //    if (conn.State == ConnectionState.Open)
-        //    {
-        //        string mySQL = "select * from Sccomp";
-
-        //        OleDbCommand cmd = new OleDbCommand(mySQL, conn);
-        //        OleDbDataAdapter DA = new OleDbDataAdapter(cmd);
-
-        //        DA.Fill(dt);
-
-        //        conn.Close();
-        //    }
-
-        //    return dt;
-        //}
+            this.btnItem.SetControlState(new FORM_MODE[] { FORM_MODE.READ }, form_mode);
+            this.btnSave.SetControlState(new FORM_MODE[] { FORM_MODE.EDIT }, form_mode);
+            this.btnStop.SetControlState(new FORM_MODE[] { FORM_MODE.EDIT }, form_mode);
+            this.btnWarrantyOK.SetControlState(new FORM_MODE[] { FORM_MODE.READ }, form_mode);
+            this.dgvIV.SetControlState(new FORM_MODE[] { FORM_MODE.READ }, form_mode);
+            this.dgvHS.SetControlState(new FORM_MODE[] { FORM_MODE.READ }, form_mode);
+            this.cbWarranty.SetControlState(new FORM_MODE[] { FORM_MODE.READ }, form_mode);
+            this.cbWarranted.SetControlState(new FORM_MODE[] { FORM_MODE.READ }, form_mode);
+        }
 
         private bool TestSecurePath()
         {
@@ -145,7 +133,14 @@ namespace Num2Serial
             }
             else
             {
-                this.curr_invoice = DbfTable.InVoice(this.data_path, (string)((DataGridView)sender).Rows[((DataGridView)sender).CurrentCell.RowIndex].Cells[this.col_iv_docnum.Name].Value);
+                if(this.tabControl2.SelectedTab == this.tabIV)
+                {
+                    this.curr_invoice = DbfTable.InVoice(this.data_path, (string)((DataGridView)sender).Rows[((DataGridView)sender).CurrentCell.RowIndex].Cells[this.col_iv_docnum.Name].Value);
+                }
+                else
+                {
+                    this.curr_invoice = DbfTable.InVoice(this.data_path, (string)((DataGridView)sender).Rows[((DataGridView)sender).CurrentCell.RowIndex].Cells[this.col_hs_docnum.Name].Value);
+                }
             }
 
             this.FillForm(this.curr_invoice);
@@ -169,7 +164,87 @@ namespace Num2Serial
             }
             else
             {
+                Invoice empty_inv = new Invoice
+                {
+                    artrn = new ArtrnDesc
+                    {
+                        cuscod = string.Empty,
+                        cusnam = string.Empty,
+                        addr01 = string.Empty,
+                        addr02 = string.Empty,
+                        addr03 = string.Empty,
+                        zipcod = string.Empty,
+                        docdat = null,
+                        docnum = string.Empty,
+                        slmcod = string.Empty,
+                        sonum = string.Empty,
+                        telnum = string.Empty
+                    },
+                    stcrds = new List<StcrdMin>()
+                };
 
+                this.FillForm(empty_inv);
+            }
+        }
+
+        private void cbWarranty_CheckedChanged(object sender, EventArgs e)
+        {
+            this.only_new_iv = ((CheckBox)sender).Checked;
+
+            if(this.tabControl2.SelectedTab == this.tabIV)
+            {
+                this.iv_list = new BindingList<ArtrnMin>(DbfTable.InvoiceList(this.data_path, this.only_new_iv, DbfTable.INVOICE_TYPE.IV));
+                this.dgvIV.DataSource = this.iv_list;
+                this.tabIV.Text = "  ขายเชื่อ (" + this.iv_list.Count.ToString() + ")  ";
+            }
+            else
+            {
+                this.hs_list = new BindingList<ArtrnMin>(DbfTable.InvoiceList(this.data_path, this.only_new_iv, DbfTable.INVOICE_TYPE.HS));
+                this.dgvHS.DataSource = this.hs_list;
+                this.tabHS.Text = "  ขายสด (" + this.hs_list.Count.ToString() + ")  ";
+            }
+        }
+
+        private void tabControl2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(((TabControl)sender).SelectedTab == this.tabIV)
+            {
+                this.iv_list = new BindingList<ArtrnMin>(DbfTable.InvoiceList(this.data_path, this.only_new_iv, DbfTable.INVOICE_TYPE.IV));
+                this.dgvIV.DataSource = this.iv_list;
+                this.tabIV.Text = "  ขายเชื่อ (" + this.iv_list.Count.ToString() + ")  ";
+            }
+            else
+            {
+                this.hs_list = new BindingList<ArtrnMin>(DbfTable.InvoiceList(this.data_path, this.only_new_iv, DbfTable.INVOICE_TYPE.HS));
+                this.dgvHS.DataSource = this.hs_list;
+                this.tabHS.Text = "  ขายสด (" + this.hs_list.Count.ToString() + ")  ";
+            }
+        }
+
+        private void dgvIV_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            if(e.RowIndex == -1)
+            {
+                if(((DataGridView)sender).Columns[e.ColumnIndex].Name == this.col_iv_warranty_spec.Name || ((DataGridView)sender).Columns[e.ColumnIndex].Name == this.col_hs_warranty_spec.Name)
+                {
+                    e.CellStyle.Font = new Font("Tahoma", 7f, FontStyle.Regular);
+                    e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void dgvSTCRD_Paint(object sender, PaintEventArgs e)
+        {
+            if (((DataGridView)sender).CurrentCell == null)
+                return;
+
+            int curr_row_ndx = ((DataGridView)sender).CurrentCell.RowIndex;
+            Rectangle rect = ((DataGridView)sender).GetRowDisplayRectangle(curr_row_ndx, true);
+            using (Pen p = new Pen(new SolidBrush(Color.Red)))
+            {
+                e.Graphics.DrawLine(p, new Point(rect.X, rect.Y), new Point(rect.X + rect.Width, rect.Y));
+                e.Graphics.DrawLine(p, new Point(rect.X, rect.Y + rect.Height - 1), new Point(rect.X + rect.Width, rect.Y + rect.Height - 1));
             }
         }
     }
