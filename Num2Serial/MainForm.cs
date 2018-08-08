@@ -180,7 +180,7 @@ namespace Num2Serial
                         sonum = string.Empty,
                         telnum = string.Empty
                     },
-                    stcrds = new List<StcrdMin>()
+                    stcrds = new List<StcrdMinVM>()
                 };
 
                 this.FillForm(empty_inv);
@@ -245,6 +245,19 @@ namespace Num2Serial
             {
                 e.Graphics.DrawLine(p, new Point(rect.X, rect.Y), new Point(rect.X + rect.Width, rect.Y));
                 e.Graphics.DrawLine(p, new Point(rect.X, rect.Y + rect.Height - 1), new Point(rect.X + rect.Width, rect.Y + rect.Height - 1));
+            }
+        }
+
+        private void dgvSTCRD_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex == -1)
+                return;
+
+            if(((DataGridView)sender).Columns[e.ColumnIndex].Name == this.col_warranty_type.Name)
+            {
+                var st = (StcrdMin)((DataGridView)sender).Rows[e.RowIndex].Cells[this.col_stcrdmin.Name].Value;
+
+                MessageBox.Show("Docnum : " + st.docnum + " - " + st.seqnum + " Clicked");
             }
         }
     }

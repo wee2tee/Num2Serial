@@ -16,6 +16,12 @@ namespace Num2Serial.Helper
             HS = 1
         }
 
+        public enum WARRANTY_TYPE
+        {
+            DEFAULT,
+            SPECIFY
+        }
+
         public static List<Sccomp> Sccomp(string secure_path)
         {
             DataTable dt = new DataTable();
@@ -294,37 +300,44 @@ namespace Num2Serial.Helper
                 }
 
                 cmd = conn.CreateCommand();
-                cmd.CommandText = "Select stcrd.tqucod, stcrd.disc, stcrd.docnum, stcrd.stkcod, stcrd.stkdes, stcrd.loccod, stcrd.trnqty, stcrd.trnval, stcrd.unitpr, stmas.warmonth, isacc.method, x.rem_remark as rem_remark From stcrd ";
+                cmd.CommandText = "Select stcrd.tqucod, stcrd.disc, stcrd.docnum, stcrd.seqnum, stcrd.stkcod, stcrd.stkdes, stcrd.loccod, stcrd.trnqty, stcrd.trnval, stcrd.unitpr, stmas.warmonth, isacc.method, x.rem_remark as rem_remark From stcrd ";
                 cmd.CommandText += "Left Join stmas On stcrd.stkcod=stmas.stkcod ";
                 cmd.CommandText += "Left Join isacc On stmas.acccod=isacc.acccod ";
-                //cmd.CommandText += "Left Join (Select artrnrm.remark From artrnrm Where TRIM(docnum)='" + docnum + "' AND SUBSTRING(seqnum,1,1) != '@' AND (Select count(*) as cnt From artrnrm Where TRIM(docnum)='" + docnum + "' AND SUBSTRING(seqnum,1,1) != '@') = 15 Order By docnum DESC Limit 1) AS artrnrm On stcrd.docnum=artrnrm.docnum ";
-                //cmd.CommandText += "Left Join (Select artrnrm.remark From artrnrm Where SUBSTRING(seqnum,1,1) != '@' AND artrnrm.docnum IN (Select docnum, count(*) as cnt From artrnrm Where TRIM(docnum)='" + docnum + "' AND SUBSTRING(seqnum,1,1) != '@' HAVING cnt=15) Order By docnum DESC Limit 1) AS artrnrm On stcrd.docnum=artrnrm.docnum AND stcrd.seqnum=SUBSTR(artrnrm.seqnum,1,3) ";
-                cmd.CommandText += "Left Join (Select artrnrm.docnum as rem_docnum, artrnrm.seqnum as rem_seqnum, artrnrm.remark as rem_remark From artrnrm Where artrnrm.docnum='" + docnum + "' AND SUBSTR(artrnrm.seqnum,1,1)!='@' AND LOWER(SUBSTR(artrnrm.remark,1,4))='war.') AS x On x.rem_docnum=stcrd.docnum AND SUBSTR(x.rem_seqnum,1,3)=stcrd.seqnum ";
-                //cmd.CommandText += "Left Join artrnrm On artrnrm.docnum=stcrd.docnum AND SUBSTR(artrnrm.seqnum,1,3)=stcrd.seqnum ";
+                cmd.CommandText += "Left Join (Select artrnrm.docnum as rem_docnum, artrnrm.seqnum as rem_seqnum, artrnrm.remark as rem_remark From artrnrm Where artrnrm.docnum='" + docnum + "' AND SUBSTR(artrnrm.seqnum,1,1)!='@' AND LOWER(artrnrm.remark) LIKE 'warranty.%') AS x On x.rem_docnum=stcrd.docnum AND SUBSTR(x.rem_seqnum,1,3)=stcrd.seqnum ";
                 cmd.CommandText += "Where TRIM(stcrd.docnum)='" + docnum + "' and isacc.method='X' Order By stcrd.seqnum";
                 using (OleDbDataAdapter da = new OleDbDataAdapter(cmd))
                 {
                     dt.Clear();
                     da.Fill(dt);
 
-                    inv.stcrds = new List<StcrdMin>();
+                    inv.stcrds = new List<StcrdMinVM>();
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        inv.stcrds.Add(new StcrdMin
+                        var st = new StcrdMin
                         {
                             disc = !dt.Rows[i].IsNull("disc") ? dt.Rows[i]["disc"].ToString() : string.Empty,
+                            docnum = !dt.Rows[i].IsNull("docnum") ? dt.Rows[i]["docnum"].ToString().Trim() : string.Empty,
                             cost_method = !dt.Rows[i].IsNull("method") ? dt.Rows[i]["method"].ToString() : string.Empty,
                             loccod = !dt.Rows[i].IsNull("loccod") ? dt.Rows[i]["loccod"].ToString().Trim() : string.Empty,
+                            seqnum = !dt.Rows[i].IsNull("seqnum") ? dt.Rows[i]["seqnum"].ToString() : string.Empty,
                             stkcod = !dt.Rows[i].IsNull("stkcod") ? dt.Rows[i]["stkcod"].ToString().Trim() : string.Empty,
                             stkdes = !dt.Rows[i].IsNull("stkdes") ? dt.Rows[i]["stkdes"].ToString().Trim() : string.Empty,
                             tqucod = !dt.Rows[i].IsNull("tqucod") ? dt.Rows[i]["tqucod"].ToString().Trim() : string.Empty,
                             trnqty = !dt.Rows[i].IsNull("trnqty") ? (double)dt.Rows[i]["trnqty"] : 0,
                             trnval = !dt.Rows[i].IsNull("trnval") ? (double)dt.Rows[i]["trnval"] : 0,
                             unitpr = !dt.Rows[i].IsNull("unitpr") ? (double)dt.Rows[i]["unitpr"] : 0,
-                            warranty_default = !dt.Rows[i].IsNull("warmonth") ? Convert.ToInt32(dt.Rows[i]["warmonth"].ToString().Trim()) : 0,
-                            warranty_text = !dt.Rows[i].IsNull("rem_remark") ? dt.Rows[i]["rem_remark"].ToString() : string.Empty,
+                            warranty_default = !dt.Rows[i].IsNull("warmonth") ? (dt.Rows[i]["warmonth"].ToString().Trim().Length > 0 ? Convert.ToInt32(dt.Rows[i]["warmonth"].ToString().Trim()) : 0) : 0,
+                            warranty_remark = !dt.Rows[i].IsNull("rem_remark") && dt.Rows[i]["rem_remark"].ToString().ToLower().StartsWith("warranty.") ? dt.Rows[i]["rem_remark"].ToString().ToLower().TrimStart(("warranty.").ToCharArray()).Trim() : string.Empty,
                             warranty_period = 0
-                        });
+                        };
+
+                        int period = 0;
+                        Int32.TryParse(st.warranty_remark, out period);
+
+                        st.warranty_period = period == 0 ? st.warranty_default : period;
+                        st.warranty_type = period == 0 ? /*WARRANTY_TYPE.DEFAULT.ToString()*/"ตามรายละเอียดสินค้า" : /*WARRANTY_TYPE.SPECIFY.ToString()*/"ระบุเอง";
+
+                        inv.stcrds.Add(st.ToViewModel());
                     }
                 }
                 
@@ -381,8 +394,14 @@ namespace Num2Serial.Helper
 
     public class StcrdMin
     {
+        public string docnum { get; set; }
+        public string seqnum { get; set; }
         public string stkcod { get; set; }
         public string stkdes { get; set; }
+        public string warranty_type { get; set; }
+        public string warranty_remark { get; set; }
+        public int warranty_period { get; set; }
+        public int warranty_default { get; set; }
         public string cost_method { get; set; }
         public string loccod { get; set; }
         public double trnqty { get; set; }
@@ -390,15 +409,24 @@ namespace Num2Serial.Helper
         public double unitpr { get; set; }
         public string disc { get; set; }
         public double trnval { get; set; }
-        public string warranty_text { get; set; }
+
+    }
+
+    public class StcrdMinVM
+    {
+        public StcrdMin stcrdmin { get; set; }
+        public string stkcod { get; set; }
+        public string stkdes { get; set; }
+        public string warranty_type { get; set; }
         public int warranty_period { get; set; }
-        public int warranty_default { get; set; }
+        public double trnqty { get; set; }
+        public string tqucod { get; set; }
     }
 
     public class Invoice
     {
         public ArtrnDesc artrn { get; set; }
-        public List<StcrdMin> stcrds { get; set; }
+        public List<StcrdMinVM> stcrds { get; set; }
     }
 
     public class Artrn

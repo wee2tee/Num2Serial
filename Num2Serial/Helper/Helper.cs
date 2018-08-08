@@ -93,5 +93,33 @@ namespace Num2Serial.Helper
                     ((ToolStripButton)comp).Enabled = false;
             }
         }
+
+        public static StcrdMinVM ToViewModel(this StcrdMin s)
+        {
+            if (s == null)
+                return null;
+
+            return new StcrdMinVM
+            {
+                stcrdmin = s,
+                stkcod = s.stkcod,
+                stkdes = s.stkdes,
+                tqucod = s.tqucod,
+                trnqty = s.trnqty,
+                warranty_period = s.warranty_period,
+                warranty_type = s.warranty_type
+            };
+        }
+
+        public static List<StcrdMinVM> ToViewModel(this IEnumerable<StcrdMin> s)
+        {
+            List<StcrdMinVM> st = new List<StcrdMinVM>();
+
+            foreach (var item in s)
+            {
+                st.Add(item.ToViewModel());
+            }
+            return st;
+        }
     }
 }

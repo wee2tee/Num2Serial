@@ -41,18 +41,7 @@
             this.col_iv_cusnam = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.inlineWarranty = new System.Windows.Forms.NumericUpDown();
             this.dgvSTCRD = new System.Windows.Forms.DataGridView();
-            this.col_stkcod = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_warranty_period = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_stkdes = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_cost_method = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_loccod = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_trnqty = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_tqucod = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_unitpr = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_disc = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_trnval = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cbWarranted = new System.Windows.Forms.CheckBox();
             this.cbWarranty = new System.Windows.Forms.CheckBox();
@@ -87,11 +76,17 @@
             this.btnStop = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.btnWarrantyOK = new System.Windows.Forms.ToolStripButton();
+            this.col_stkcod = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_stkdes = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_warranty_type = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.col_warranty_period = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_trnqty = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_tqucod = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_stcrdmin = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvIV)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.inlineWarranty)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSTCRD)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.tabControl2.SuspendLayout();
@@ -111,7 +106,7 @@
             this.lblDataPath});
             this.statusStrip1.Location = new System.Drawing.Point(0, 643);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1464, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1188, 22);
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -207,32 +202,18 @@
             this.tabControl1.Location = new System.Drawing.Point(355, 220);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1099, 410);
+            this.tabControl1.Size = new System.Drawing.Size(823, 410);
             this.tabControl1.TabIndex = 3;
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.inlineWarranty);
             this.tabPage1.Controls.Add(this.dgvSTCRD);
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(1091, 381);
+            this.tabPage1.Size = new System.Drawing.Size(815, 381);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "รายการสินค้าในบิล (เฉพาะที่คุม Serial)";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // inlineWarranty
-            // 
-            this.inlineWarranty.Location = new System.Drawing.Point(155, 142);
-            this.inlineWarranty.Maximum = new decimal(new int[] {
-            480,
-            0,
-            0,
-            0});
-            this.inlineWarranty.Name = "inlineWarranty";
-            this.inlineWarranty.Size = new System.Drawing.Size(120, 23);
-            this.inlineWarranty.TabIndex = 4;
-            this.inlineWarranty.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // dgvSTCRD
             // 
@@ -243,15 +224,12 @@
             this.dgvSTCRD.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvSTCRD.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.col_stkcod,
-            this.col_warranty_period,
             this.col_stkdes,
-            this.col_cost_method,
-            this.col_loccod,
+            this.col_warranty_type,
+            this.col_warranty_period,
             this.col_trnqty,
             this.col_tqucod,
-            this.col_unitpr,
-            this.col_disc,
-            this.col_trnval});
+            this.col_stcrdmin});
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
@@ -268,99 +246,10 @@
             this.dgvSTCRD.RowHeadersVisible = false;
             this.dgvSTCRD.RowTemplate.Height = 25;
             this.dgvSTCRD.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvSTCRD.Size = new System.Drawing.Size(1091, 381);
+            this.dgvSTCRD.Size = new System.Drawing.Size(815, 381);
             this.dgvSTCRD.TabIndex = 3;
+            this.dgvSTCRD.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSTCRD_CellContentClick);
             this.dgvSTCRD.Paint += new System.Windows.Forms.PaintEventHandler(this.dgvSTCRD_Paint);
-            // 
-            // col_stkcod
-            // 
-            this.col_stkcod.DataPropertyName = "stkcod";
-            this.col_stkcod.Frozen = true;
-            this.col_stkcod.HeaderText = "รหัสสินค้า";
-            this.col_stkcod.MinimumWidth = 150;
-            this.col_stkcod.Name = "col_stkcod";
-            this.col_stkcod.ReadOnly = true;
-            this.col_stkcod.Width = 150;
-            // 
-            // col_warranty_period
-            // 
-            this.col_warranty_period.DataPropertyName = "warranty_period";
-            this.col_warranty_period.Frozen = true;
-            this.col_warranty_period.HeaderText = "อายุรับประกัน";
-            this.col_warranty_period.MinimumWidth = 120;
-            this.col_warranty_period.Name = "col_warranty_period";
-            this.col_warranty_period.ReadOnly = true;
-            this.col_warranty_period.Width = 120;
-            // 
-            // col_stkdes
-            // 
-            this.col_stkdes.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.col_stkdes.DataPropertyName = "stkdes";
-            this.col_stkdes.HeaderText = "รายละเอียด";
-            this.col_stkdes.MinimumWidth = 140;
-            this.col_stkdes.Name = "col_stkdes";
-            this.col_stkdes.ReadOnly = true;
-            // 
-            // col_cost_method
-            // 
-            this.col_cost_method.DataPropertyName = "cost_method";
-            this.col_cost_method.HeaderText = "วิธีคิดต้นทุน";
-            this.col_cost_method.MinimumWidth = 40;
-            this.col_cost_method.Name = "col_cost_method";
-            this.col_cost_method.ReadOnly = true;
-            this.col_cost_method.Visible = false;
-            this.col_cost_method.Width = 40;
-            // 
-            // col_loccod
-            // 
-            this.col_loccod.DataPropertyName = "loccod";
-            this.col_loccod.HeaderText = "คลัง";
-            this.col_loccod.MinimumWidth = 40;
-            this.col_loccod.Name = "col_loccod";
-            this.col_loccod.ReadOnly = true;
-            this.col_loccod.Width = 40;
-            // 
-            // col_trnqty
-            // 
-            this.col_trnqty.DataPropertyName = "trnqty";
-            this.col_trnqty.HeaderText = "จำนวน";
-            this.col_trnqty.MinimumWidth = 100;
-            this.col_trnqty.Name = "col_trnqty";
-            this.col_trnqty.ReadOnly = true;
-            // 
-            // col_tqucod
-            // 
-            this.col_tqucod.DataPropertyName = "tqucod";
-            this.col_tqucod.HeaderText = "";
-            this.col_tqucod.MinimumWidth = 30;
-            this.col_tqucod.Name = "col_tqucod";
-            this.col_tqucod.ReadOnly = true;
-            this.col_tqucod.Width = 30;
-            // 
-            // col_unitpr
-            // 
-            this.col_unitpr.DataPropertyName = "unitpr";
-            this.col_unitpr.HeaderText = "ราคา/หน่วย";
-            this.col_unitpr.MinimumWidth = 100;
-            this.col_unitpr.Name = "col_unitpr";
-            this.col_unitpr.ReadOnly = true;
-            // 
-            // col_disc
-            // 
-            this.col_disc.DataPropertyName = "disc";
-            this.col_disc.HeaderText = "ส่วนลด";
-            this.col_disc.MinimumWidth = 90;
-            this.col_disc.Name = "col_disc";
-            this.col_disc.ReadOnly = true;
-            this.col_disc.Width = 90;
-            // 
-            // col_trnval
-            // 
-            this.col_trnval.DataPropertyName = "trnval";
-            this.col_trnval.HeaderText = "จำนวนเงิน";
-            this.col_trnval.MinimumWidth = 100;
-            this.col_trnval.Name = "col_trnval";
-            this.col_trnval.ReadOnly = true;
             // 
             // groupBox1
             // 
@@ -524,7 +413,7 @@
             this.panel1.Controls.Add(this.label1);
             this.panel1.Location = new System.Drawing.Point(360, 57);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1090, 157);
+            this.panel1.Size = new System.Drawing.Size(814, 157);
             this.panel1.TabIndex = 6;
             // 
             // lblSlmcod
@@ -532,7 +421,7 @@
             this.lblSlmcod.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSlmcod.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lblSlmcod.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblSlmcod.Location = new System.Drawing.Point(959, 93);
+            this.lblSlmcod.Location = new System.Drawing.Point(683, 93);
             this.lblSlmcod.Name = "lblSlmcod";
             this.lblSlmcod.Size = new System.Drawing.Size(101, 21);
             this.lblSlmcod.TabIndex = 1;
@@ -543,7 +432,7 @@
             this.lblSonum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSonum.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lblSonum.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblSonum.Location = new System.Drawing.Point(959, 65);
+            this.lblSonum.Location = new System.Drawing.Point(683, 65);
             this.lblSonum.Name = "lblSonum";
             this.lblSonum.Size = new System.Drawing.Size(101, 21);
             this.lblSonum.TabIndex = 1;
@@ -554,7 +443,7 @@
             this.lblDocdat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDocdat.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lblDocdat.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDocdat.Location = new System.Drawing.Point(959, 37);
+            this.lblDocdat.Location = new System.Drawing.Point(683, 37);
             this.lblDocdat.Name = "lblDocdat";
             this.lblDocdat.Size = new System.Drawing.Size(101, 21);
             this.lblDocdat.TabIndex = 1;
@@ -565,7 +454,7 @@
             this.lblDocnum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDocnum.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lblDocnum.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDocnum.Location = new System.Drawing.Point(959, 9);
+            this.lblDocnum.Location = new System.Drawing.Point(683, 9);
             this.lblDocnum.Name = "lblDocnum";
             this.lblDocnum.Size = new System.Drawing.Size(101, 21);
             this.lblDocnum.TabIndex = 1;
@@ -585,7 +474,7 @@
             // 
             this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(879, 95);
+            this.label9.Location = new System.Drawing.Point(603, 95);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(75, 16);
             this.label9.TabIndex = 0;
@@ -595,7 +484,7 @@
             // 
             this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(879, 67);
+            this.label7.Location = new System.Drawing.Point(603, 67);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(71, 16);
             this.label7.TabIndex = 0;
@@ -605,7 +494,7 @@
             // 
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(879, 39);
+            this.label5.Location = new System.Drawing.Point(603, 39);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(31, 16);
             this.label5.TabIndex = 0;
@@ -615,7 +504,7 @@
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(879, 11);
+            this.label3.Location = new System.Drawing.Point(603, 11);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(37, 16);
             this.label3.TabIndex = 0;
@@ -627,7 +516,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblAddr02.Location = new System.Drawing.Point(24, 93);
             this.lblAddr02.Name = "lblAddr02";
-            this.lblAddr02.Size = new System.Drawing.Size(846, 21);
+            this.lblAddr02.Size = new System.Drawing.Size(570, 21);
             this.lblAddr02.TabIndex = 0;
             this.lblAddr02.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -637,7 +526,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblAddr01.Location = new System.Drawing.Point(24, 65);
             this.lblAddr01.Name = "lblAddr01";
-            this.lblAddr01.Size = new System.Drawing.Size(846, 21);
+            this.lblAddr01.Size = new System.Drawing.Size(570, 21);
             this.lblAddr01.TabIndex = 0;
             this.lblAddr01.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -647,7 +536,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblCusnam.Location = new System.Drawing.Point(24, 37);
             this.lblCusnam.Name = "lblCusnam";
-            this.lblCusnam.Size = new System.Drawing.Size(846, 21);
+            this.lblCusnam.Size = new System.Drawing.Size(570, 21);
             this.lblCusnam.TabIndex = 0;
             this.lblCusnam.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -657,7 +546,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblTelnum.Location = new System.Drawing.Point(24, 123);
             this.lblTelnum.Name = "lblTelnum";
-            this.lblTelnum.Size = new System.Drawing.Size(846, 21);
+            this.lblTelnum.Size = new System.Drawing.Size(570, 21);
             this.lblTelnum.TabIndex = 0;
             this.lblTelnum.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -681,7 +570,7 @@
             this.btnWarrantyOK});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1464, 43);
+            this.toolStrip1.Size = new System.Drawing.Size(1188, 43);
             this.toolStrip1.TabIndex = 7;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -737,11 +626,75 @@
             this.btnWarrantyOK.Size = new System.Drawing.Size(36, 40);
             this.btnWarrantyOK.Text = "ทำเครื่องหมายว่าอินวอยซ์นี้ กรอกอายุรับประกันแล้ว";
             // 
+            // col_stkcod
+            // 
+            this.col_stkcod.DataPropertyName = "stkcod";
+            this.col_stkcod.HeaderText = "รหัสสินค้า";
+            this.col_stkcod.MinimumWidth = 150;
+            this.col_stkcod.Name = "col_stkcod";
+            this.col_stkcod.ReadOnly = true;
+            this.col_stkcod.Width = 150;
+            // 
+            // col_stkdes
+            // 
+            this.col_stkdes.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.col_stkdes.DataPropertyName = "stkdes";
+            this.col_stkdes.HeaderText = "รายละเอียด";
+            this.col_stkdes.MinimumWidth = 140;
+            this.col_stkdes.Name = "col_stkdes";
+            this.col_stkdes.ReadOnly = true;
+            // 
+            // col_warranty_type
+            // 
+            this.col_warranty_type.DataPropertyName = "warranty_type";
+            this.col_warranty_type.HeaderText = "Warranty Type";
+            this.col_warranty_type.MinimumWidth = 140;
+            this.col_warranty_type.Name = "col_warranty_type";
+            this.col_warranty_type.ReadOnly = true;
+            this.col_warranty_type.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.col_warranty_type.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.col_warranty_type.Width = 140;
+            // 
+            // col_warranty_period
+            // 
+            this.col_warranty_period.DataPropertyName = "warranty_period";
+            this.col_warranty_period.HeaderText = "อายุรับประกัน (เดือน)";
+            this.col_warranty_period.MinimumWidth = 130;
+            this.col_warranty_period.Name = "col_warranty_period";
+            this.col_warranty_period.ReadOnly = true;
+            this.col_warranty_period.Width = 130;
+            // 
+            // col_trnqty
+            // 
+            this.col_trnqty.DataPropertyName = "trnqty";
+            this.col_trnqty.HeaderText = "จำนวน";
+            this.col_trnqty.MinimumWidth = 100;
+            this.col_trnqty.Name = "col_trnqty";
+            this.col_trnqty.ReadOnly = true;
+            // 
+            // col_tqucod
+            // 
+            this.col_tqucod.DataPropertyName = "tqucod";
+            this.col_tqucod.HeaderText = "";
+            this.col_tqucod.MinimumWidth = 30;
+            this.col_tqucod.Name = "col_tqucod";
+            this.col_tqucod.ReadOnly = true;
+            this.col_tqucod.Width = 30;
+            // 
+            // col_stcrdmin
+            // 
+            this.col_stcrdmin.DataPropertyName = "stcrdmin";
+            this.col_stcrdmin.HeaderText = "StcrdMin";
+            this.col_stcrdmin.MinimumWidth = 100;
+            this.col_stcrdmin.Name = "col_stcrdmin";
+            this.col_stcrdmin.ReadOnly = true;
+            this.col_stcrdmin.Visible = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1464, 665);
+            this.ClientSize = new System.Drawing.Size(1188, 665);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.tabControl2);
@@ -763,7 +716,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvIV)).EndInit();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.inlineWarranty)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvSTCRD)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -809,16 +761,6 @@
         private System.Windows.Forms.Label lblTelnum;
         private System.Windows.Forms.DataGridView dgvSTCRD;
         private System.Windows.Forms.DataGridView dgvHS;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_stkcod;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_warranty_period;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_stkdes;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_cost_method;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_loccod;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_trnqty;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_tqucod;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_unitpr;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_disc;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_trnval;
         private System.Windows.Forms.DataGridViewTextBoxColumn col_iv_docdat;
         private System.Windows.Forms.DataGridViewTextBoxColumn col_iv_docnum;
         private System.Windows.Forms.DataGridViewTextBoxColumn col_iv_cuscod;
@@ -837,7 +779,13 @@
         private System.Windows.Forms.ToolStripButton btnStop;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton btnWarrantyOK;
-        private System.Windows.Forms.NumericUpDown inlineWarranty;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_stkcod;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_stkdes;
+        private System.Windows.Forms.DataGridViewButtonColumn col_warranty_type;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_warranty_period;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_trnqty;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_tqucod;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_stcrdmin;
     }
 }
 
