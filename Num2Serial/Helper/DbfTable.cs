@@ -16,12 +16,6 @@ namespace Num2Serial.Helper
             HS = 1
         }
 
-        public enum WARRANTY_TYPE
-        {
-            DEFAULT,
-            SPECIFY
-        }
-
         public static List<Sccomp> Sccomp(string secure_path)
         {
             DataTable dt = new DataTable();
@@ -335,7 +329,7 @@ namespace Num2Serial.Helper
                         Int32.TryParse(st.warranty_remark, out period);
 
                         st.warranty_period = period == 0 ? st.warranty_default : period;
-                        st.warranty_type = period == 0 ? /*WARRANTY_TYPE.DEFAULT.ToString()*/"ตามรายละเอียดสินค้า" : /*WARRANTY_TYPE.SPECIFY.ToString()*/"ระบุเอง";
+                        st.warranty_type = period == 0 ? WarrantyType.TYPE.DEFAULT : WarrantyType.TYPE.SPECIFY;
 
                         inv.stcrds.Add(st.ToViewModel());
                     }
@@ -398,7 +392,7 @@ namespace Num2Serial.Helper
         public string seqnum { get; set; }
         public string stkcod { get; set; }
         public string stkdes { get; set; }
-        public string warranty_type { get; set; }
+        public WarrantyType.TYPE warranty_type { get; set; }
         public string warranty_remark { get; set; }
         public int warranty_period { get; set; }
         public int warranty_default { get; set; }
@@ -427,6 +421,33 @@ namespace Num2Serial.Helper
     {
         public ArtrnDesc artrn { get; set; }
         public List<StcrdMinVM> stcrds { get; set; }
+    }
+
+    public class Stlotsn
+    {
+        public string stkcod { get; set; }
+        public string docnum { get; set; }
+        public string seqnum { get; set; }
+        public string serial { get; set; }
+        public string cutnum { get; set; }
+
+    }
+
+    public class Issn
+    {
+        public string stkcod { get; set; }
+        public string serial { get; set; }
+        public string warmonth { get; set; }
+        public DateTime? sal_date { get; set; }
+        public DateTime? war_date { get; set; }
+        public DateTime? exp_date { get; set; }
+    }
+
+    public class Artrnrm
+    {
+        public string docnum { get; set; }
+        public string seqnum { get; set; }
+        public string remark { get; set; }
     }
 
     public class Artrn

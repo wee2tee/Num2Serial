@@ -12,9 +12,32 @@ namespace Num2Serial.Helper
         public static Color COL_HEADER_BG = Color.FromArgb(209, 149, 109);
     }
 
+    public class WarrantyType
+    {
+        public enum TYPE
+        {
+            DEFAULT,
+            SPECIFY
+        }
+        public const string Default = "ตามรายละเอียดสินค้า";
+        public const string Specify = "ระบุเอง";
+    }
+
+    public class ComboboxItem
+    {
+        public object value { get; set; }
+        public string Text { get; set; }
+        public override string ToString()
+        {
+            return this.Text;
+        }
+    }
+
     public enum FORM_MODE
     {
         READ,
         EDIT
     }
+
+    
 }

@@ -257,7 +257,13 @@ namespace Num2Serial
             {
                 var st = (StcrdMin)((DataGridView)sender).Rows[e.RowIndex].Cells[this.col_stcrdmin.Name].Value;
 
-                MessageBox.Show("Docnum : " + st.docnum + " - " + st.seqnum + " Clicked");
+                //MessageBox.Show("Docnum : " + st.docnum + " - " + st.seqnum + " Clicked");
+
+                DialogWarranty war = new DialogWarranty(this, st);
+                if(war.ShowDialog() == DialogResult.OK)
+                {
+
+                }
             }
         }
     }

@@ -59,6 +59,12 @@
     <Compile Include="SubForm\DialogCompanySelect.Designer.cs">
       <DependentUpon>DialogCompanySelect.cs</DependentUpon>
     </Compile>
+    <Compile Include="SubForm\DialogWarranty.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForm\DialogWarranty.Designer.cs">
+      <DependentUpon>DialogWarranty.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -74,6 +80,9 @@
     </Compile>
     <EmbeddedResource Include="SubForm\DialogCompanySelect.resx">
       <DependentUpon>DialogCompanySelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForm\DialogWarranty.resx">
+      <DependentUpon>DialogWarranty.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

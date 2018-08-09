@@ -107,7 +107,7 @@ namespace Num2Serial.Helper
                 tqucod = s.tqucod,
                 trnqty = s.trnqty,
                 warranty_period = s.warranty_period,
-                warranty_type = s.warranty_type
+                warranty_type = s.warranty_type == WarrantyType.TYPE.DEFAULT ? WarrantyType.Default : WarrantyType.Specify
             };
         }
 
