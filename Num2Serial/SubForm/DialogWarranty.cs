@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.OleDb;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -94,7 +95,6 @@ namespace Num2Serial.SubForm
                     }
 
                     cmd.CommandText = "Select artrnrm.docnum, artrnrm.seqnum, artrnrm.remark From artrnrm Where SUBSTR(artrnrm.seqnum,1,3)='" + this.stcrdmin.seqnum + "' ";
-                    //cmd.CommandText += "ORDER BY artrnrm.docnum,artrnrm.seqnum ASC";
                     using (OleDbDataAdapter da = new OleDbDataAdapter(cmd))
                     {
                         dt.Clear();
@@ -117,11 +117,118 @@ namespace Num2Serial.SubForm
             switch (this.stcrdmin.warranty_type)
             {
                 case WarrantyType.TYPE.DEFAULT:
-                    
+                    try
+                    {
+                        using (OleDbConnection conn = new OleDbConnection(@"Provider=VFPOLEDB.1;Data Source=" + this.main_form.data_path))
+                        {
+                            /* Update ISSN */
+                            foreach (var item in issn)
+                            {
+                                conn.Open();
+                                using (OleDbCommand cmd = conn.CreateCommand())
+                                {
+                                    /* Update ISSN */
+                                    item.war_date = item.war_date.HasValue ? item.war_date.Value : item.sal_date.Value;
+                                    item.warmonth = this.stcrdmin.warranty_period.ToString();
+                                    item.exp_date = item.war_date.Value.AddMonths(this.stcrdmin.warranty_period);
+                                    var exp = item.exp_date.Value.ToString("yyyy,MM,dd", CultureInfo.GetCultureInfo("En-Us"));
+
+                                    cmd.CommandText = "Update issn Set warmonth='" + item.warmonth + "', exp_date=DATE(" + exp + ") ";
+                                    cmd.CommandText += "Where issn.stkcod='" + item.stkcod + "' AND issn.serial='" + item.serial + "'";
+
+                                    cmd.ExecuteNonQuery();
+                                }
+                                conn.Close();
+                            }
+
+                            /* Update ARTRNRM */
+                            conn.Open();
+                            using (OleDbCommand cmd = conn.CreateCommand())
+                            {
+                                cmd.CommandText = "Delete From artrnrm Where TRIM(docnum)='" + this.stcrdmin.docnum + "' AND SUBSTR(seqnum,1,3)='" + this.stcrdmin.seqnum + "'";
+                                cmd.ExecuteNonQuery();
+
+                                if(artrnrm.Count == 15 && artrnrm[14].remark.ToLower().StartsWith("warranty."))
+                                {
+                                    int max_rem = 0;
+                                    for (int i = 0; i < 14; i++)
+                                    {
+                                        max_rem = artrnrm[i].remark.Trim().Length > 0 ? i + 1 : max_rem;
+                                    }
+
+                                    for (int i = 0; i < max_rem; i++)
+                                    {
+                                        cmd.CommandText = "Insert into artrnrm (docnum, seqnum, remark) Values('" + this.stcrdmin.docnum.PadRight(12) + "', '" + this.stcrdmin.seqnum.PadRight(13) + "', '" + artrnrm[i].remark.PadRight(50) + "')";
+                                        cmd.ExecuteNonQuery();
+                                    }
+                                }
+
+                                //cmd.CommandText = "Insert into artrnrm (docnum, seqnum, remark) Values('" + this.stcrdmin.docnum.PadRight(12) + "', '" + this.stcrdmin.seqnum.PadRight(13) + "', 'WARRANTY." + this.stcrdmin.warranty_period.ToString() + "')";
+                                //cmd.ExecuteNonQuery();
+                            }
+                            conn.Close();
+
+                            this.DialogResult = DialogResult.OK;
+                            this.Close();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
                     break;
 
                 case WarrantyType.TYPE.SPECIFY:
+                    try
+                    {
+                        using (OleDbConnection conn = new OleDbConnection(@"Provider=VFPOLEDB.1;Data Source=" + this.main_form.data_path))
+                        {
+                            /* Update ISSN */
+                            foreach (var item in issn)
+                            {
+                                conn.Open();
+                                using (OleDbCommand cmd = conn.CreateCommand())
+                                {
+                                    item.war_date = item.war_date.HasValue ? item.war_date.Value : item.sal_date.Value;
+                                    item.warmonth = this.stcrdmin.warranty_period.ToString();
+                                    item.exp_date = item.war_date.Value.AddMonths(this.stcrdmin.warranty_period);
+                                    var exp = item.exp_date.Value.ToString("yyyy,MM,dd", CultureInfo.GetCultureInfo("En-Us"));
 
+                                    cmd.CommandText = "Update issn Set warmonth='" + item.warmonth + "', exp_date=DATE(" + exp + ") ";
+                                    cmd.CommandText += "Where issn.stkcod='" + item.stkcod + "' AND issn.serial='" + item.serial + "'";
+
+                                    cmd.ExecuteNonQuery();
+                                }
+                                conn.Close();
+                            }
+
+                            /* Update Artrnrm */
+                            conn.Open();
+                            using (OleDbCommand cmd = conn.CreateCommand())
+                            {
+                                for (int i = 0; i < 14 - artrnrm.Count; i++)
+                                {
+                                    cmd.CommandText = "Insert into artrnrm (docnum, seqnum, remark) Values('" + this.stcrdmin.docnum.PadRight(12) + "', '" + this.stcrdmin.seqnum.PadRight(13) + "', '')";
+                                    cmd.ExecuteNonQuery();
+                                }
+
+                                cmd.CommandText = "Insert into artrnrm (docnum, seqnum, remark) Values('" + this.stcrdmin.docnum.PadRight(12) + "', '" + this.stcrdmin.seqnum.PadRight(13) + "', 'WARRANTY." + this.stcrdmin.warranty_period.ToString() + "')";
+                                cmd.ExecuteNonQuery();
+                            }
+                            conn.Close();
+
+                            this.DialogResult = DialogResult.OK;
+                            this.Close();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    
                     break;
 
                 default:
