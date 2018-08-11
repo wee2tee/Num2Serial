@@ -33,6 +33,12 @@ namespace Num2Serial.Helper
         }
     }
 
+    public class ReIndexResult
+    {
+        public bool success { get; set; }
+        public string err_message { get; set; }
+    }
+
     public enum FORM_MODE
     {
         READ,

@@ -42,6 +42,13 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.dgvSTCRD = new System.Windows.Forms.DataGridView();
+            this.col_stkcod = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_stkdes = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_warranty_type = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.col_warranty_period = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_trnqty = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_tqucod = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_stcrdmin = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cbWarranted = new System.Windows.Forms.CheckBox();
             this.cbWarranty = new System.Windows.Forms.CheckBox();
@@ -76,13 +83,6 @@
             this.btnStop = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.btnWarrantyOK = new System.Windows.Forms.ToolStripButton();
-            this.col_stkcod = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_stkdes = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_warranty_type = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.col_warranty_period = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_trnqty = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_tqucod = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_stcrdmin = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvIV)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -250,6 +250,70 @@
             this.dgvSTCRD.TabIndex = 3;
             this.dgvSTCRD.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSTCRD_CellContentClick);
             this.dgvSTCRD.Paint += new System.Windows.Forms.PaintEventHandler(this.dgvSTCRD_Paint);
+            // 
+            // col_stkcod
+            // 
+            this.col_stkcod.DataPropertyName = "stkcod";
+            this.col_stkcod.HeaderText = "รหัสสินค้า";
+            this.col_stkcod.MinimumWidth = 150;
+            this.col_stkcod.Name = "col_stkcod";
+            this.col_stkcod.ReadOnly = true;
+            this.col_stkcod.Width = 150;
+            // 
+            // col_stkdes
+            // 
+            this.col_stkdes.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.col_stkdes.DataPropertyName = "stkdes";
+            this.col_stkdes.HeaderText = "รายละเอียด";
+            this.col_stkdes.MinimumWidth = 140;
+            this.col_stkdes.Name = "col_stkdes";
+            this.col_stkdes.ReadOnly = true;
+            // 
+            // col_warranty_type
+            // 
+            this.col_warranty_type.DataPropertyName = "warranty_type";
+            this.col_warranty_type.HeaderText = "Warranty Type";
+            this.col_warranty_type.MinimumWidth = 140;
+            this.col_warranty_type.Name = "col_warranty_type";
+            this.col_warranty_type.ReadOnly = true;
+            this.col_warranty_type.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.col_warranty_type.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.col_warranty_type.Width = 140;
+            // 
+            // col_warranty_period
+            // 
+            this.col_warranty_period.DataPropertyName = "warranty_period";
+            this.col_warranty_period.HeaderText = "อายุรับประกัน (เดือน)";
+            this.col_warranty_period.MinimumWidth = 130;
+            this.col_warranty_period.Name = "col_warranty_period";
+            this.col_warranty_period.ReadOnly = true;
+            this.col_warranty_period.Width = 130;
+            // 
+            // col_trnqty
+            // 
+            this.col_trnqty.DataPropertyName = "trnqty";
+            this.col_trnqty.HeaderText = "จำนวน";
+            this.col_trnqty.MinimumWidth = 100;
+            this.col_trnqty.Name = "col_trnqty";
+            this.col_trnqty.ReadOnly = true;
+            // 
+            // col_tqucod
+            // 
+            this.col_tqucod.DataPropertyName = "tqucod";
+            this.col_tqucod.HeaderText = "";
+            this.col_tqucod.MinimumWidth = 30;
+            this.col_tqucod.Name = "col_tqucod";
+            this.col_tqucod.ReadOnly = true;
+            this.col_tqucod.Width = 30;
+            // 
+            // col_stcrdmin
+            // 
+            this.col_stcrdmin.DataPropertyName = "stcrdmin";
+            this.col_stcrdmin.HeaderText = "StcrdMin";
+            this.col_stcrdmin.MinimumWidth = 100;
+            this.col_stcrdmin.Name = "col_stcrdmin";
+            this.col_stcrdmin.ReadOnly = true;
+            this.col_stcrdmin.Visible = false;
             // 
             // groupBox1
             // 
@@ -625,70 +689,7 @@
             this.btnWarrantyOK.Name = "btnWarrantyOK";
             this.btnWarrantyOK.Size = new System.Drawing.Size(36, 40);
             this.btnWarrantyOK.Text = "ทำเครื่องหมายว่าอินวอยซ์นี้ กรอกอายุรับประกันแล้ว";
-            // 
-            // col_stkcod
-            // 
-            this.col_stkcod.DataPropertyName = "stkcod";
-            this.col_stkcod.HeaderText = "รหัสสินค้า";
-            this.col_stkcod.MinimumWidth = 150;
-            this.col_stkcod.Name = "col_stkcod";
-            this.col_stkcod.ReadOnly = true;
-            this.col_stkcod.Width = 150;
-            // 
-            // col_stkdes
-            // 
-            this.col_stkdes.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.col_stkdes.DataPropertyName = "stkdes";
-            this.col_stkdes.HeaderText = "รายละเอียด";
-            this.col_stkdes.MinimumWidth = 140;
-            this.col_stkdes.Name = "col_stkdes";
-            this.col_stkdes.ReadOnly = true;
-            // 
-            // col_warranty_type
-            // 
-            this.col_warranty_type.DataPropertyName = "warranty_type";
-            this.col_warranty_type.HeaderText = "Warranty Type";
-            this.col_warranty_type.MinimumWidth = 140;
-            this.col_warranty_type.Name = "col_warranty_type";
-            this.col_warranty_type.ReadOnly = true;
-            this.col_warranty_type.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.col_warranty_type.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.col_warranty_type.Width = 140;
-            // 
-            // col_warranty_period
-            // 
-            this.col_warranty_period.DataPropertyName = "warranty_period";
-            this.col_warranty_period.HeaderText = "อายุรับประกัน (เดือน)";
-            this.col_warranty_period.MinimumWidth = 130;
-            this.col_warranty_period.Name = "col_warranty_period";
-            this.col_warranty_period.ReadOnly = true;
-            this.col_warranty_period.Width = 130;
-            // 
-            // col_trnqty
-            // 
-            this.col_trnqty.DataPropertyName = "trnqty";
-            this.col_trnqty.HeaderText = "จำนวน";
-            this.col_trnqty.MinimumWidth = 100;
-            this.col_trnqty.Name = "col_trnqty";
-            this.col_trnqty.ReadOnly = true;
-            // 
-            // col_tqucod
-            // 
-            this.col_tqucod.DataPropertyName = "tqucod";
-            this.col_tqucod.HeaderText = "";
-            this.col_tqucod.MinimumWidth = 30;
-            this.col_tqucod.Name = "col_tqucod";
-            this.col_tqucod.ReadOnly = true;
-            this.col_tqucod.Width = 30;
-            // 
-            // col_stcrdmin
-            // 
-            this.col_stcrdmin.DataPropertyName = "stcrdmin";
-            this.col_stcrdmin.HeaderText = "StcrdMin";
-            this.col_stcrdmin.MinimumWidth = 100;
-            this.col_stcrdmin.Name = "col_stcrdmin";
-            this.col_stcrdmin.ReadOnly = true;
-            this.col_stcrdmin.Visible = false;
+            this.btnWarrantyOK.Click += new System.EventHandler(this.btnWarrantyOK_Click);
             // 
             // MainForm
             // 

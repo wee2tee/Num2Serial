@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.OleDb;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -17,6 +18,7 @@ namespace Num2Serial
     public partial class MainForm : Form
     {
         public string secure_path = null;
+        public string express_path = null;
         public string data_path = null;
         public Invoice curr_invoice = null;
         private BindingList<ArtrnMin> iv_list;
@@ -53,7 +55,8 @@ namespace Num2Serial
             this.dgvIV.DataSource = this.iv_list;
             this.hs_list = new BindingList<ArtrnMin>();
 
-            this.secure_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName + @"\secure\";
+            this.secure_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName + @"\secure";
+            this.express_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName;
 
             if (!this.TestSecurePath())
             {
@@ -257,14 +260,81 @@ namespace Num2Serial
             {
                 var st = (StcrdMin)((DataGridView)sender).Rows[e.RowIndex].Cells[this.col_stcrdmin.Name].Value;
 
-                //MessageBox.Show("Docnum : " + st.docnum + " - " + st.seqnum + " Clicked");
-
                 DialogWarranty war = new DialogWarranty(this, st);
                 if(war.ShowDialog() == DialogResult.OK)
                 {
 
                 }
             }
+        }
+
+        private void btnWarrantyOK_Click(object sender, EventArgs e)
+        {
+            var reindex_result = this.Reindex();
+            
+            if (reindex_result.success)
+            {
+                MessageBox.Show("It's OK");
+            }
+            else
+            {
+                MessageBox.Show(reindex_result.err_message);
+            }
+
+        }
+
+        public ReIndexResult Reindex()
+        {
+            ReIndexResult result = new ReIndexResult { success = false, err_message = string.Empty };
+
+            FileInfo file_dbinf = new FileInfo(this.express_path + @"\dbinf.dbf");
+            FileInfo file_artrnrm = new FileInfo(this.data_path + @"\artrnrm.dbf");
+
+            if (!File.Exists(this.express_path + @"\dbinf.dbf"))
+            {
+                result.err_message = "File Not Found DBINF.DBF";
+                return result;
+            }
+            if (file_dbinf.IsInUse())
+            {
+                result.err_message = "Permission Error File DBINF.DBF";
+                return result;
+            }
+            if (file_artrnrm.IsInUse())
+            {
+                result.err_message = "Permission Error File ARTRNRM.DBF";
+                return result;
+            }
+
+
+            ProcessStartInfo startInfo = new ProcessStartInfo();
+            startInfo.WorkingDirectory = this.express_path;
+            startInfo.UseShellExecute = false;
+            startInfo.CreateNoWindow = true;
+            startInfo.RedirectStandardOutput = true;
+            startInfo.RedirectStandardError = true;
+            startInfo.RedirectStandardInput = true;
+
+            startInfo.FileName = this.express_path + @"\adm32.exe";
+            startInfo.Arguments = this.data_path;
+
+            Process process = new Process();
+            process.StartInfo = startInfo;
+            process.Start();
+
+            process.StandardInput.WriteLine("14");
+
+            StringBuilder message = new StringBuilder();
+            while (!process.StandardOutput.EndOfStream)
+            {
+                char[] buffer = new char[200];
+                int chars = process.StandardOutput.Read(buffer, 0, buffer.Length);
+                message.Append(buffer, 0, chars);
+            }
+
+            result.success = true;
+
+            return result;
         }
     }
 }
