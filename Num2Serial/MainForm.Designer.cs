@@ -28,8 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblDataPath = new System.Windows.Forms.ToolStripStatusLabel();
@@ -37,7 +39,7 @@
             this.col_iv_docdat = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.col_iv_docnum = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.col_iv_cuscod = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_iv_warranty_spec = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_iv_warranty_spec = new System.Windows.Forms.DataGridViewButtonColumn();
             this.col_iv_cusnam = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -50,8 +52,8 @@
             this.col_tqucod = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.col_stcrdmin = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.cbWarranted = new System.Windows.Forms.CheckBox();
-            this.cbWarranty = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.cbStatus = new System.Windows.Forms.ComboBox();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabIV = new System.Windows.Forms.TabPage();
             this.tabHS = new System.Windows.Forms.TabPage();
@@ -59,7 +61,7 @@
             this.col_hs_docdat = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.col_hs_docnum = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.col_hs_cuscod = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_hs_warranty_spec = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_hs_warranty_spec = new System.Windows.Forms.DataGridViewButtonColumn();
             this.col_hs_cusnam = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1 = new System.Windows.Forms.Panel();
             this.lblSlmcod = new System.Windows.Forms.Label();
@@ -76,13 +78,7 @@
             this.lblCusnam = new System.Windows.Forms.Label();
             this.lblTelnum = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.btnItem = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.btnSave = new System.Windows.Forms.ToolStripButton();
-            this.btnStop = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.btnWarrantyOK = new System.Windows.Forms.ToolStripButton();
+            this.lblStatus = new System.Windows.Forms.Label();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvIV)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -94,7 +90,6 @@
             this.tabHS.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvHS)).BeginInit();
             this.panel1.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -136,6 +131,14 @@
             this.col_iv_cuscod,
             this.col_iv_warranty_spec,
             this.col_iv_cusnam});
+            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle14.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle14.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            dataGridViewCellStyle14.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvIV.DefaultCellStyle = dataGridViewCellStyle14;
             this.dgvIV.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvIV.EnableHeadersVisualStyles = false;
             this.dgvIV.Location = new System.Drawing.Point(3, 3);
@@ -144,16 +147,18 @@
             this.dgvIV.RowHeadersVisible = false;
             this.dgvIV.RowTemplate.Height = 25;
             this.dgvIV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvIV.Size = new System.Drawing.Size(330, 442);
+            this.dgvIV.Size = new System.Drawing.Size(330, 495);
             this.dgvIV.TabIndex = 2;
+            this.dgvIV.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvIV_CellContentClick);
             this.dgvIV.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvIV_CellPainting);
             this.dgvIV.CurrentCellChanged += new System.EventHandler(this.dgvIV_CurrentCellChanged);
+            this.dgvIV.Paint += new System.Windows.Forms.PaintEventHandler(this.dgv_PaintFocusedRow);
             // 
             // col_iv_docdat
             // 
             this.col_iv_docdat.DataPropertyName = "docdat";
-            dataGridViewCellStyle1.Format = "dd/MM/yyyy";
-            this.col_iv_docdat.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle13.Format = "dd/MM/yyyy";
+            this.col_iv_docdat.DefaultCellStyle = dataGridViewCellStyle13;
             this.col_iv_docdat.HeaderText = "วันที่";
             this.col_iv_docdat.MinimumWidth = 85;
             this.col_iv_docdat.Name = "col_iv_docdat";
@@ -183,6 +188,9 @@
             this.col_iv_warranty_spec.MinimumWidth = 30;
             this.col_iv_warranty_spec.Name = "col_iv_warranty_spec";
             this.col_iv_warranty_spec.ReadOnly = true;
+            this.col_iv_warranty_spec.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.col_iv_warranty_spec.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.col_iv_warranty_spec.ToolTipText = "ทำเครื่องหมายว่าบันทึกอายุรับประกันแล้ว";
             this.col_iv_warranty_spec.Width = 30;
             // 
             // col_iv_cusnam
@@ -199,10 +207,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Location = new System.Drawing.Point(355, 220);
+            this.tabControl1.Location = new System.Drawing.Point(360, 178);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(823, 410);
+            this.tabControl1.Size = new System.Drawing.Size(818, 459);
             this.tabControl1.TabIndex = 3;
             // 
             // tabPage1
@@ -210,7 +218,7 @@
             this.tabPage1.Controls.Add(this.dgvSTCRD);
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(815, 381);
+            this.tabPage1.Size = new System.Drawing.Size(810, 430);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "รายการสินค้าในบิล (เฉพาะที่คุม Serial)";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -230,14 +238,14 @@
             this.col_trnqty,
             this.col_tqucod,
             this.col_stcrdmin});
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvSTCRD.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle15.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle15.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            dataGridViewCellStyle15.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvSTCRD.DefaultCellStyle = dataGridViewCellStyle15;
             this.dgvSTCRD.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvSTCRD.EnableHeadersVisualStyles = false;
             this.dgvSTCRD.Location = new System.Drawing.Point(0, 0);
@@ -246,10 +254,10 @@
             this.dgvSTCRD.RowHeadersVisible = false;
             this.dgvSTCRD.RowTemplate.Height = 25;
             this.dgvSTCRD.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvSTCRD.Size = new System.Drawing.Size(815, 381);
+            this.dgvSTCRD.Size = new System.Drawing.Size(810, 430);
             this.dgvSTCRD.TabIndex = 3;
             this.dgvSTCRD.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSTCRD_CellContentClick);
-            this.dgvSTCRD.Paint += new System.Windows.Forms.PaintEventHandler(this.dgvSTCRD_Paint);
+            this.dgvSTCRD.Paint += new System.Windows.Forms.PaintEventHandler(this.dgv_PaintFocusedRow);
             // 
             // col_stkcod
             // 
@@ -317,40 +325,36 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.cbWarranted);
-            this.groupBox1.Controls.Add(this.cbWarranty);
+            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.cbStatus);
             this.groupBox1.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            this.groupBox1.Location = new System.Drawing.Point(12, 59);
+            this.groupBox1.Location = new System.Drawing.Point(12, 17);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(337, 85);
+            this.groupBox1.Size = new System.Drawing.Size(337, 82);
             this.groupBox1.TabIndex = 4;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "กำหนดเงื่อนไขเพิ่มเติม";
+            this.groupBox1.Text = "กำหนดเงื่อนไขการแสดงข้อมูล";
             // 
-            // cbWarranted
+            // label2
             // 
-            this.cbWarranted.AutoSize = true;
-            this.cbWarranted.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            this.cbWarranted.Location = new System.Drawing.Point(20, 51);
-            this.cbWarranted.Name = "cbWarranted";
-            this.cbWarranted.Size = new System.Drawing.Size(200, 20);
-            this.cbWarranted.TabIndex = 1;
-            this.cbWarranted.Text = "รายการที่กรอกอายุรับประกันแล้ว";
-            this.cbWarranted.UseVisualStyleBackColor = true;
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            this.label2.Location = new System.Drawing.Point(10, 24);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(84, 16);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "สถานะรายการ";
             // 
-            // cbWarranty
+            // cbStatus
             // 
-            this.cbWarranty.AutoSize = true;
-            this.cbWarranty.Checked = true;
-            this.cbWarranty.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbWarranty.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            this.cbWarranty.Location = new System.Drawing.Point(20, 25);
-            this.cbWarranty.Name = "cbWarranty";
-            this.cbWarranty.Size = new System.Drawing.Size(222, 20);
-            this.cbWarranty.TabIndex = 0;
-            this.cbWarranty.Text = "รายการที่ยังไม่ได้กรอกอายุรับประกัน";
-            this.cbWarranty.UseVisualStyleBackColor = true;
-            this.cbWarranty.CheckedChanged += new System.EventHandler(this.cbWarranty_CheckedChanged);
+            this.cbStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbStatus.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            this.cbStatus.FormattingEnabled = true;
+            this.cbStatus.Location = new System.Drawing.Point(13, 44);
+            this.cbStatus.Name = "cbStatus";
+            this.cbStatus.Size = new System.Drawing.Size(312, 24);
+            this.cbStatus.TabIndex = 2;
+            this.cbStatus.SelectedIndexChanged += new System.EventHandler(this.cbStatus_SelectedIndexChanged);
             // 
             // tabControl2
             // 
@@ -358,10 +362,10 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.tabControl2.Controls.Add(this.tabIV);
             this.tabControl2.Controls.Add(this.tabHS);
-            this.tabControl2.Location = new System.Drawing.Point(12, 153);
+            this.tabControl2.Location = new System.Drawing.Point(12, 107);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(344, 477);
+            this.tabControl2.Size = new System.Drawing.Size(344, 530);
             this.tabControl2.TabIndex = 5;
             this.tabControl2.SelectedIndexChanged += new System.EventHandler(this.tabControl2_SelectedIndexChanged);
             // 
@@ -371,7 +375,7 @@
             this.tabIV.Location = new System.Drawing.Point(4, 25);
             this.tabIV.Name = "tabIV";
             this.tabIV.Padding = new System.Windows.Forms.Padding(3);
-            this.tabIV.Size = new System.Drawing.Size(336, 448);
+            this.tabIV.Size = new System.Drawing.Size(336, 501);
             this.tabIV.TabIndex = 0;
             this.tabIV.Text = "  ขายเชื่อ  ";
             this.tabIV.UseVisualStyleBackColor = true;
@@ -382,7 +386,7 @@
             this.tabHS.Location = new System.Drawing.Point(4, 25);
             this.tabHS.Name = "tabHS";
             this.tabHS.Padding = new System.Windows.Forms.Padding(3);
-            this.tabHS.Size = new System.Drawing.Size(336, 448);
+            this.tabHS.Size = new System.Drawing.Size(336, 501);
             this.tabHS.TabIndex = 1;
             this.tabHS.Text = "  ขายสด  ";
             this.tabHS.UseVisualStyleBackColor = true;
@@ -401,6 +405,14 @@
             this.col_hs_cuscod,
             this.col_hs_warranty_spec,
             this.col_hs_cusnam});
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle16.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle16.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            dataGridViewCellStyle16.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle16.SelectionBackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle16.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvHS.DefaultCellStyle = dataGridViewCellStyle16;
             this.dgvHS.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvHS.EnableHeadersVisualStyles = false;
             this.dgvHS.Location = new System.Drawing.Point(3, 3);
@@ -409,10 +421,12 @@
             this.dgvHS.RowHeadersVisible = false;
             this.dgvHS.RowTemplate.Height = 25;
             this.dgvHS.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvHS.Size = new System.Drawing.Size(330, 442);
+            this.dgvHS.Size = new System.Drawing.Size(330, 495);
             this.dgvHS.TabIndex = 3;
+            this.dgvHS.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvIV_CellContentClick);
             this.dgvHS.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvIV_CellPainting);
             this.dgvHS.CurrentCellChanged += new System.EventHandler(this.dgvIV_CurrentCellChanged);
+            this.dgvHS.Paint += new System.Windows.Forms.PaintEventHandler(this.dgv_PaintFocusedRow);
             // 
             // col_hs_docdat
             // 
@@ -446,6 +460,9 @@
             this.col_hs_warranty_spec.MinimumWidth = 30;
             this.col_hs_warranty_spec.Name = "col_hs_warranty_spec";
             this.col_hs_warranty_spec.ReadOnly = true;
+            this.col_hs_warranty_spec.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.col_hs_warranty_spec.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.col_hs_warranty_spec.ToolTipText = "ทำเครื่องหมายว่าบันทึกอายุรับประกันแล้ว";
             this.col_hs_warranty_spec.Width = 30;
             // 
             // col_hs_cusnam
@@ -461,6 +478,7 @@
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.lblStatus);
             this.panel1.Controls.Add(this.lblSlmcod);
             this.panel1.Controls.Add(this.lblSonum);
             this.panel1.Controls.Add(this.lblDocdat);
@@ -475,7 +493,7 @@
             this.panel1.Controls.Add(this.lblCusnam);
             this.panel1.Controls.Add(this.lblTelnum);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(360, 57);
+            this.panel1.Location = new System.Drawing.Point(360, 15);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(814, 157);
             this.panel1.TabIndex = 6;
@@ -485,7 +503,7 @@
             this.lblSlmcod.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSlmcod.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lblSlmcod.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblSlmcod.Location = new System.Drawing.Point(683, 93);
+            this.lblSlmcod.Location = new System.Drawing.Point(683, 123);
             this.lblSlmcod.Name = "lblSlmcod";
             this.lblSlmcod.Size = new System.Drawing.Size(101, 21);
             this.lblSlmcod.TabIndex = 1;
@@ -496,7 +514,7 @@
             this.lblSonum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblSonum.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lblSonum.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblSonum.Location = new System.Drawing.Point(683, 65);
+            this.lblSonum.Location = new System.Drawing.Point(683, 93);
             this.lblSonum.Name = "lblSonum";
             this.lblSonum.Size = new System.Drawing.Size(101, 21);
             this.lblSonum.TabIndex = 1;
@@ -507,7 +525,7 @@
             this.lblDocdat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDocdat.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lblDocdat.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDocdat.Location = new System.Drawing.Point(683, 37);
+            this.lblDocdat.Location = new System.Drawing.Point(683, 65);
             this.lblDocdat.Name = "lblDocdat";
             this.lblDocdat.Size = new System.Drawing.Size(101, 21);
             this.lblDocdat.TabIndex = 1;
@@ -518,7 +536,7 @@
             this.lblDocnum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.lblDocnum.BackColor = System.Drawing.Color.WhiteSmoke;
             this.lblDocnum.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblDocnum.Location = new System.Drawing.Point(683, 9);
+            this.lblDocnum.Location = new System.Drawing.Point(683, 37);
             this.lblDocnum.Name = "lblDocnum";
             this.lblDocnum.Size = new System.Drawing.Size(101, 21);
             this.lblDocnum.TabIndex = 1;
@@ -538,7 +556,7 @@
             // 
             this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(603, 95);
+            this.label9.Location = new System.Drawing.Point(603, 125);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(75, 16);
             this.label9.TabIndex = 0;
@@ -548,7 +566,7 @@
             // 
             this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(603, 67);
+            this.label7.Location = new System.Drawing.Point(603, 95);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(71, 16);
             this.label7.TabIndex = 0;
@@ -558,7 +576,7 @@
             // 
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(603, 39);
+            this.label5.Location = new System.Drawing.Point(603, 67);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(31, 16);
             this.label5.TabIndex = 0;
@@ -568,7 +586,7 @@
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(603, 11);
+            this.label3.Location = new System.Drawing.Point(603, 39);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(37, 16);
             this.label3.TabIndex = 0;
@@ -623,80 +641,24 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "รหัสลูกค้า";
             // 
-            // toolStrip1
+            // lblStatus
             // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.btnItem,
-            this.toolStripSeparator1,
-            this.btnSave,
-            this.btnStop,
-            this.toolStripSeparator2,
-            this.btnWarrantyOK});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1188, 43);
-            this.toolStrip1.TabIndex = 7;
-            this.toolStrip1.Text = "toolStrip1";
-            // 
-            // btnItem
-            // 
-            this.btnItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnItem.Image = global::Num2Serial.Properties.Resources.item;
-            this.btnItem.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btnItem.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnItem.Name = "btnItem";
-            this.btnItem.Size = new System.Drawing.Size(36, 40);
-            this.btnItem.Text = "เริ่มกรอกอายุรับประกันในรายการสินค้า <F8>";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 43);
-            // 
-            // btnSave
-            // 
-            this.btnSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnSave.Image = global::Num2Serial.Properties.Resources.save;
-            this.btnSave.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(36, 40);
-            this.btnSave.Text = "บันทึก <F9>";
-            // 
-            // btnStop
-            // 
-            this.btnStop.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnStop.Image = global::Num2Serial.Properties.Resources.stop;
-            this.btnStop.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btnStop.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(36, 40);
-            this.btnStop.Text = "ยกเลิกการแก้ไขข้อมูล <Esc>";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 43);
-            // 
-            // btnWarrantyOK
-            // 
-            this.btnWarrantyOK.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.btnWarrantyOK.Image = global::Num2Serial.Properties.Resources.ok;
-            this.btnWarrantyOK.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-            this.btnWarrantyOK.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.btnWarrantyOK.Name = "btnWarrantyOK";
-            this.btnWarrantyOK.Size = new System.Drawing.Size(36, 40);
-            this.btnWarrantyOK.Text = "ทำเครื่องหมายว่าอินวอยซ์นี้ กรอกอายุรับประกันแล้ว";
-            this.btnWarrantyOK.Click += new System.EventHandler(this.btnWarrantyOK_Click);
+            this.lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblStatus.AutoSize = true;
+            this.lblStatus.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            this.lblStatus.ForeColor = System.Drawing.Color.Blue;
+            this.lblStatus.Location = new System.Drawing.Point(527, 9);
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(282, 18);
+            this.lblStatus.TabIndex = 2;
+            this.lblStatus.Text = "ทำเครื่องหมายว่าบันทึกอายุรับประกันแล้ว";
+            this.lblStatus.Visible = false;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1188, 665);
-            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.tabControl2);
             this.Controls.Add(this.groupBox1);
@@ -705,7 +667,7 @@
             this.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
             this.KeyPreview = true;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.MinimumSize = new System.Drawing.Size(815, 400);
+            this.MinimumSize = new System.Drawing.Size(825, 400);
             this.Name = "MainForm";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -726,8 +688,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.dgvHS)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -741,7 +701,6 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.CheckBox cbWarranty;
         private System.Windows.Forms.TabControl tabControl2;
         private System.Windows.Forms.TabPage tabIV;
         private System.Windows.Forms.TabPage tabHS;
@@ -762,24 +721,6 @@
         private System.Windows.Forms.Label lblTelnum;
         private System.Windows.Forms.DataGridView dgvSTCRD;
         private System.Windows.Forms.DataGridView dgvHS;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_iv_docdat;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_iv_docnum;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_iv_cuscod;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_iv_warranty_spec;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_iv_cusnam;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_hs_docdat;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_hs_docnum;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_hs_cuscod;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_hs_warranty_spec;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_hs_cusnam;
-        private System.Windows.Forms.CheckBox cbWarranted;
-        private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton btnItem;
-        private System.Windows.Forms.ToolStripButton btnSave;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton btnStop;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripButton btnWarrantyOK;
         private System.Windows.Forms.DataGridViewTextBoxColumn col_stkcod;
         private System.Windows.Forms.DataGridViewTextBoxColumn col_stkdes;
         private System.Windows.Forms.DataGridViewButtonColumn col_warranty_type;
@@ -787,6 +728,19 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn col_trnqty;
         private System.Windows.Forms.DataGridViewTextBoxColumn col_tqucod;
         private System.Windows.Forms.DataGridViewTextBoxColumn col_stcrdmin;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ComboBox cbStatus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_iv_docdat;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_iv_docnum;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_iv_cuscod;
+        private System.Windows.Forms.DataGridViewButtonColumn col_iv_warranty_spec;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_iv_cusnam;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_hs_docdat;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_hs_docnum;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_hs_cuscod;
+        private System.Windows.Forms.DataGridViewButtonColumn col_hs_warranty_spec;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_hs_cusnam;
+        private System.Windows.Forms.Label lblStatus;
     }
 }
 

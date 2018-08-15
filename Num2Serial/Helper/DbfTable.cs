@@ -53,7 +53,7 @@ namespace Num2Serial.Helper
             return sccomp;
         }
 
-        public static List<ArtrnMin> InvoiceList(string data_path, bool only_new_invoice = true, INVOICE_TYPE invoice_type = INVOICE_TYPE.IV)
+        public static List<ArtrnMin> InvoiceList(string data_path, TransactionStatus.STATUS status = TransactionStatus.STATUS.WARRANTY, INVOICE_TYPE invoice_type = INVOICE_TYPE.IV)
         {
             if (!File.Exists(data_path + "artrn.dbf"))
                 throw new Exception("ค้นหาไฟล์ artrn.dbf ไม่พบ");
@@ -71,24 +71,59 @@ namespace Num2Serial.Helper
             {
                 conn.Open();
                 var cmd = conn.CreateCommand();
-                if (only_new_invoice)
+                switch (status)
                 {
-                    cmd.CommandText = "Select artrn.docnum, artrn.docdat, artrn.cuscod, artrn.num2, armas.cusnam From artrn ";
-                    cmd.CommandText += "Left Join armas On artrn.cuscod = armas.cuscod ";
-                    cmd.CommandText += "Where artrn.docnum In ";
-                    cmd.CommandText += "(Select stcrd.docnum From stcrd Left Join stmas On stcrd.stkcod=stmas.stkcod Left Join isacc On stmas.acccod=isacc.acccod Where isacc.method='X') ";
-                    cmd.CommandText += "And rectyp='" + ((int)invoice_type).ToString() + "' And num2=0 ";
-                    cmd.CommandText += "Order By docdat,docnum ASC";
+                    case TransactionStatus.STATUS.ALL:
+                        cmd.CommandText = "Select artrn.docnum, artrn.docdat, artrn.cuscod, artrn.num2, armas.cusnam From artrn ";
+                        cmd.CommandText += "Left Join armas On artrn.cuscod = armas.cuscod ";
+                        cmd.CommandText += "Where artrn.docnum In ";
+                        cmd.CommandText += "(Select stcrd.docnum From stcrd Left Join stmas On stcrd.stkcod=stmas.stkcod Left Join isacc On stmas.acccod=isacc.acccod Where isacc.method='X') ";
+                        cmd.CommandText += "And rectyp='" + ((int)invoice_type).ToString() + "'";
+                        cmd.CommandText += "Order By docdat,docnum ASC";
+                        break;
+                    case TransactionStatus.STATUS.WARRANTY:
+                        cmd.CommandText = "Select artrn.docnum, artrn.docdat, artrn.cuscod, artrn.num2, armas.cusnam From artrn ";
+                        cmd.CommandText += "Left Join armas On artrn.cuscod = armas.cuscod ";
+                        cmd.CommandText += "Where artrn.docnum In ";
+                        cmd.CommandText += "(Select stcrd.docnum From stcrd Left Join stmas On stcrd.stkcod=stmas.stkcod Left Join isacc On stmas.acccod=isacc.acccod Where isacc.method='X') ";
+                        cmd.CommandText += "And rectyp='" + ((int)invoice_type).ToString() + "' And num2=0 ";
+                        cmd.CommandText += "Order By docdat,docnum ASC";
+                        break;
+                    case TransactionStatus.STATUS.WARRANTED:
+                        cmd.CommandText = "Select artrn.docnum, artrn.docdat, artrn.cuscod, artrn.num2, armas.cusnam From artrn ";
+                        cmd.CommandText += "Left Join armas On artrn.cuscod = armas.cuscod ";
+                        cmd.CommandText += "Where artrn.docnum In ";
+                        cmd.CommandText += "(Select stcrd.docnum From stcrd Left Join stmas On stcrd.stkcod=stmas.stkcod Left Join isacc On stmas.acccod=isacc.acccod Where isacc.method='X') ";
+                        cmd.CommandText += "And rectyp='" + ((int)invoice_type).ToString() + "' And num2>0 ";
+                        cmd.CommandText += "Order By docdat,docnum ASC";
+                        break;
+                    default:
+                        cmd.CommandText = "Select artrn.docnum, artrn.docdat, artrn.cuscod, artrn.num2, armas.cusnam From artrn ";
+                        cmd.CommandText += "Left Join armas On artrn.cuscod = armas.cuscod ";
+                        cmd.CommandText += "Where artrn.docnum In ";
+                        cmd.CommandText += "(Select stcrd.docnum From stcrd Left Join stmas On stcrd.stkcod=stmas.stkcod Left Join isacc On stmas.acccod=isacc.acccod Where isacc.method='X') ";
+                        cmd.CommandText += "And rectyp='" + ((int)invoice_type).ToString() + "'";
+                        cmd.CommandText += "Order By docdat,docnum ASC";
+                        break;
                 }
-                else
-                {
-                    cmd.CommandText = "Select artrn.docnum, artrn.docdat, artrn.cuscod, artrn.num2, armas.cusnam From artrn ";
-                    cmd.CommandText += "Left Join armas On artrn.cuscod = armas.cuscod ";
-                    cmd.CommandText += "Where artrn.docnum In ";
-                    cmd.CommandText += "(Select stcrd.docnum From stcrd Left Join stmas On stcrd.stkcod=stmas.stkcod Left Join isacc On stmas.acccod=isacc.acccod Where isacc.method='X') ";
-                    cmd.CommandText += "And rectyp='" + ((int)invoice_type).ToString() + "' ";
-                    cmd.CommandText += "Order By docdat,docnum ASC";
-                }
+                //if (status == TransactionStatus.STATUS.WARRANTY)
+                //{
+                //    cmd.CommandText = "Select artrn.docnum, artrn.docdat, artrn.cuscod, artrn.num2, armas.cusnam From artrn ";
+                //    cmd.CommandText += "Left Join armas On artrn.cuscod = armas.cuscod ";
+                //    cmd.CommandText += "Where artrn.docnum In ";
+                //    cmd.CommandText += "(Select stcrd.docnum From stcrd Left Join stmas On stcrd.stkcod=stmas.stkcod Left Join isacc On stmas.acccod=isacc.acccod Where isacc.method='X') ";
+                //    cmd.CommandText += "And rectyp='" + ((int)invoice_type).ToString() + "' And num2=0 ";
+                //    cmd.CommandText += "Order By docdat,docnum ASC";
+                //}
+                //else
+                //{
+                //    cmd.CommandText = "Select artrn.docnum, artrn.docdat, artrn.cuscod, artrn.num2, armas.cusnam From artrn ";
+                //    cmd.CommandText += "Left Join armas On artrn.cuscod = armas.cuscod ";
+                //    cmd.CommandText += "Where artrn.docnum In ";
+                //    cmd.CommandText += "(Select stcrd.docnum From stcrd Left Join stmas On stcrd.stkcod=stmas.stkcod Left Join isacc On stmas.acccod=isacc.acccod Where isacc.method='X') ";
+                //    cmd.CommandText += "And rectyp='" + ((int)invoice_type).ToString() + "' ";
+                //    cmd.CommandText += "Order By docdat,docnum ASC";
+                //}
 
 
                 OleDbDataAdapter da = new OleDbDataAdapter(cmd);
@@ -110,130 +145,6 @@ namespace Num2Serial.Helper
                         warranty_spec = !row.IsNull("num2") ? ((double)row["num2"] > 0 ? "Y" : "") : ""
                     };
 
-                    //Artrn a = new Artrn
-                    //{
-                    //    rectyp = row.Field<string>("rectyp"),
-                    //    docnum = row.Field<string>("docnum").Trim(),
-                    //    docdat = !row.IsNull("docdat") ? (DateTime?)row.Field<DateTime>("docdat") : null,
-                    //    postgl = row.Field<string>("postgl"),
-                    //    sonum = row.Field<string>("sonum"),
-                    //    cntyp = row.Field<string>("cntyp"),
-                    //    depcod = row.Field<string>("depcod"),
-                    //    flgvat = row.Field<string>("flgvat"),
-                    //    slmcod = row.Field<string>("slmcod"),
-                    //    cuscod = row.Field<string>("cuscod"),
-                    //    shipto = row.Field<string>("shipto"),
-                    //    youref = row.Field<string>("youref"),
-                    //    areacod = row.Field<string>("areacod"),
-                    //    paytrm = row.Field<decimal>("paytrm"),
-                    //    duedat = !row.IsNull("duedat") ? (DateTime?)row.Field<DateTime>("duedat") : null,
-                    //    bilnum = row.Field<string>("bilnum"),
-                    //    nxtseq = row.Field<string>("nxtseq"),
-                    //    amount = row.Field<double>("amount"),
-                    //    disc = row.Field<string>("disc"),
-                    //    discamt = row.Field<double>("discamt"),
-                    //    aftdisc = row.Field<double>("aftdisc"),
-                    //    advnum = row.Field<string>("advnum"),
-                    //    advamt = row.Field<double>("advamt"),
-                    //    total = row.Field<double>("total"),
-                    //    amtrat0 = row.Field<double>("amtrat0"),
-                    //    vatrat = row.Field<decimal>("vatrat"),
-                    //    vatamt = row.Field<double>("vatamt"),
-                    //    netamt = row.Field<double>("netamt"),
-                    //    netval = row.Field<double>("netval"),
-                    //    rcvamt = row.Field<double>("rcvamt"),
-                    //    remamt = row.Field<double>("remamt"),
-                    //    comamt = row.Field<double>("comamt"),
-                    //    cmplapp = row.Field<string>("cmplapp"),
-                    //    cmpldat = !row.IsNull("cmpldat") ? (DateTime?)row.Field<DateTime>("cmpldat") : null,
-                    //    docstat = row.Field<string>("docstat"),
-                    //    cshrcv = row.Field<double>("cshrcv"),
-                    //    chqrcv = row.Field<double>("chqrcv"),
-                    //    intrcv = row.Field<double>("intrcv"),
-                    //    beftax = row.Field<double>("beftax"),
-                    //    taxrat = row.Field<decimal>("taxrat"),
-                    //    taxcond = row.Field<string>("taxcond"),
-                    //    tax = row.Field<double>("tax"),
-                    //    ivcamt = row.Field<double>("ivcamt"),
-                    //    chqpas = row.Field<double>("chqpas"),
-                    //    vatdat = !row.IsNull("vatdat") ? (DateTime?)row.Field<DateTime>("vatdat") : null,
-                    //    vatprd = !row.IsNull("vatprd") ? (DateTime?)row.Field<DateTime>("vatprd") : null,
-                    //    vatlate = row.Field<string>("vatlate"),
-                    //    srv_vattyp = row.Field<string>("srv_vattyp"),
-                    //    dlvby = row.Field<string>("dlvby"),
-                    //    reserve = !row.IsNull("reserve") ? (DateTime?)row.Field<DateTime>("reserve") : null,
-                    //    userid = row.Field<string>("userid"),
-                    //    chgdat = !row.IsNull("chgdat") ? (DateTime?)row.Field<DateTime>("chgdat") : null,
-                    //    userprn = row.Field<string>("userprn"),
-                    //    prndat = !row.IsNull("prndat") ? (DateTime?)row.Field<DateTime>("prndat") : null,
-                    //    prncnt = row.Field<decimal>("prncnt"),
-                    //    authid = row.Field<string>("authid"),
-                    //    approve = !row.IsNull("approve") ? (DateTime?)row.Field<DateTime>("approve") : null,
-                    //    billto = row.Field<string>("billto"),
-                    //    orgnum = row.Field<decimal>("orgnum")
-                    //};
-
-                    ///* only in v.1 */
-                    //if (dt.Columns.Contains("prntim"))
-                    //    a.prntim = row.Field<string>("prntim");
-                    ///* only in v.2 */
-                    //if (dt.Columns.Contains("creby"))
-                    //    a.creby = row.Field<string>("creby");
-                    //if (dt.Columns.Contains("credat"))
-                    //    a.credat = !row.IsNull("credat") ? (DateTime?)row.Field<DateTime>("credat") : null;
-                    //if (dt.Columns.Contains("ponum"))
-                    //    a.ponum = row.Field<string>("ponum");
-                    //if (dt.Columns.Contains("c_type"))
-                    //    a.c_type = row.Field<string>("c_type");
-                    //if (dt.Columns.Contains("c_date"))
-                    //    a.c_date = !row.IsNull("c_date") ? (DateTime?)row.Field<DateTime>("c_date") : null;
-                    //if (dt.Columns.Contains("c_ref"))
-                    //    a.c_ref = row.Field<string>("c_ref");
-                    //if (dt.Columns.Contains("c_rate"))
-                    //    a.c_rate = row.Field<double>("c_rate");
-                    //if (dt.Columns.Contains("c_fixrate"))
-                    //    a.c_fixrate = row.Field<string>("c_fixrate");
-                    //if (dt.Columns.Contains("c_ratio"))
-                    //    a.c_ratio = row.Field<double>("c_ratio");
-                    //if (dt.Columns.Contains("c_amount"))
-                    //    a.c_amount = row.Field<double>("c_amount");
-                    //if (dt.Columns.Contains("c_disc"))
-                    //    a.c_disc = row.Field<string>("c_disc");
-                    //if (dt.Columns.Contains("c_discamt"))
-                    //    a.c_discamt = row.Field<double>("c_discamt");
-                    //if (dt.Columns.Contains("c_aftdisc"))
-                    //    a.c_aftdisc = row.Field<double>("c_aftdisc");
-                    //if (dt.Columns.Contains("c_advamt"))
-                    //    a.c_advamt = row.Field<double>("c_advamt");
-                    //if (dt.Columns.Contains("c_total"))
-                    //    a.c_total = row.Field<double>("c_total");
-                    //if (dt.Columns.Contains("c_netamt"))
-                    //    a.c_netamt = row.Field<double>("c_netamt");
-                    //if (dt.Columns.Contains("c_netval"))
-                    //    a.c_netval = row.Field<double>("c_netval");
-                    //if (dt.Columns.Contains("c_ivcamt"))
-                    //    a.c_ivcamt = row.Field<double>("c_ivcamt");
-                    //if (dt.Columns.Contains("c_difamt"))
-                    //    a.c_difamt = row.Field<double>("c_difamt");
-                    //if (dt.Columns.Contains("c_rcvamt"))
-                    //    a.c_rcvamt = row.Field<double>("c_rcvamt");
-                    //if (dt.Columns.Contains("c_remamt"))
-                    //    a.c_remamt = row.Field<double>("c_remamt");
-                    //if (dt.Columns.Contains("link1"))
-                    //    a.link1 = row.Field<string>("link1");
-                    //if (dt.Columns.Contains("dat1"))
-                    //    a.dat1 = !row.IsNull("dat1") ? (DateTime?)row.Field<DateTime>("dat1") : null;
-                    //if (dt.Columns.Contains("dat2"))
-                    //    a.dat2 = !row.IsNull("dat2") ? (DateTime?)row.Field<DateTime>("dat2") : null;
-                    //if (dt.Columns.Contains("num1"))
-                    //    a.num1 = row.Field<double>("num1");
-                    //if (dt.Columns.Contains("num2"))
-                    //    a.num2 = row.Field<double>("num2");
-                    //if (dt.Columns.Contains("str1"))
-                    //    a.str1 = row.Field<string>("str1");
-                    //if (dt.Columns.Contains("str2"))
-                    //    a.str2 = row.Field<string>("str2");
-
                     artrn.Add(a);
                 }
                 catch (Exception)
@@ -244,6 +155,74 @@ namespace Num2Serial.Helper
 
             return artrn;
         }
+
+        //public static List<ArtrnMin> InvoiceList(string data_path, bool warranty_iv = true, bool warranted_iv = false, INVOICE_TYPE invoice_type = INVOICE_TYPE.IV)
+        //{
+        //    if (!File.Exists(data_path + "artrn.dbf"))
+        //        throw new Exception("ค้นหาไฟล์ artrn.dbf ไม่พบ");
+        //    if (!File.Exists(data_path + "stcrd.dbf"))
+        //        throw new Exception("ค้นหาไฟล์ stcrd.dbf ไม่พบ");
+        //    if (!File.Exists(data_path + "stmas.dbf"))
+        //        throw new Exception("ค้นหาไฟล์ stmas.dbf ไม่พบ");
+        //    if (!File.Exists(data_path + "isacc.dbf"))
+        //        throw new Exception("ค้นหาไฟล์ isacc.dbf ไม่พบ");
+        //    if (!File.Exists(data_path + "artrnrm.dbf"))
+        //        throw new Exception("ค้นหาไฟล์ artrnrm.dbf ไม่พบ");
+
+        //    DataTable dt = new DataTable();
+        //    using (OleDbConnection conn = new OleDbConnection(@"Provider=VFPOLEDB.1;Data Source=" + data_path))
+        //    {
+        //        conn.Open();
+        //        var cmd = conn.CreateCommand();
+        //        if (warranty_iv)
+        //        {
+        //            cmd.CommandText = "Select artrn.docnum, artrn.docdat, artrn.cuscod, artrn.num2, armas.cusnam From artrn ";
+        //            cmd.CommandText += "Left Join armas On artrn.cuscod = armas.cuscod ";
+        //            cmd.CommandText += "Where artrn.docnum In ";
+        //            cmd.CommandText += "(Select stcrd.docnum From stcrd Left Join stmas On stcrd.stkcod=stmas.stkcod Left Join isacc On stmas.acccod=isacc.acccod Where isacc.method='X') ";
+        //            cmd.CommandText += "And rectyp='" + ((int)invoice_type).ToString() + "' And num2=0 ";
+        //            cmd.CommandText += "Order By docdat,docnum ASC";
+        //        }
+        //        else
+        //        {
+        //            cmd.CommandText = "Select artrn.docnum, artrn.docdat, artrn.cuscod, artrn.num2, armas.cusnam From artrn ";
+        //            cmd.CommandText += "Left Join armas On artrn.cuscod = armas.cuscod ";
+        //            cmd.CommandText += "Where artrn.docnum In ";
+        //            cmd.CommandText += "(Select stcrd.docnum From stcrd Left Join stmas On stcrd.stkcod=stmas.stkcod Left Join isacc On stmas.acccod=isacc.acccod Where isacc.method='X') ";
+        //            cmd.CommandText += "And rectyp='" + ((int)invoice_type).ToString() + "' ";
+        //            cmd.CommandText += "Order By docdat,docnum ASC";
+        //        }
+
+
+        //        OleDbDataAdapter da = new OleDbDataAdapter(cmd);
+        //        da.Fill(dt);
+        //        conn.Close();
+        //    }
+
+        //    List<ArtrnMin> artrn = new List<ArtrnMin>();
+        //    foreach (DataRow row in dt.Rows)
+        //    {
+        //        try
+        //        {
+        //            ArtrnMin a = new ArtrnMin
+        //            {
+        //                cuscod = !row.IsNull("cuscod") ? row["cuscod"].ToString().Trim() : string.Empty,
+        //                cusnam = !row.IsNull("cusnam") ? row["cusnam"].ToString().Trim() : string.Empty,
+        //                docnum = !row.IsNull("docnum") ? row["docnum"].ToString().Trim() : string.Empty,
+        //                docdat = !row.IsNull("docdat") ? (DateTime?)row["docdat"] : null,
+        //                warranty_spec = !row.IsNull("num2") ? ((double)row["num2"] > 0 ? "Y" : "") : ""
+        //            };
+
+        //            artrn.Add(a);
+        //        }
+        //        catch (Exception)
+        //        {
+        //            continue;
+        //        }
+        //    }
+
+        //    return artrn;
+        //}
 
         public static Invoice InVoice(string data_path, string docnum)
         {
@@ -266,7 +245,7 @@ namespace Num2Serial.Helper
                 DataTable dt = new DataTable();
 
                 var cmd = conn.CreateCommand();
-                cmd.CommandText = "Select artrn.docnum, artrn.docdat, artrn.cuscod, artrn.slmcod, artrn.sonum, armas.cusnam, armas.addr01, armas.addr02, armas.addr03, armas.zipcod, armas.telnum From artrn Left Join armas On artrn.cuscod = armas.cuscod Where TRIM(docnum)='" + docnum.Trim() + "'";
+                cmd.CommandText = "Select artrn.docnum, artrn.docdat, artrn.cuscod, artrn.slmcod, artrn.sonum, artrn.num2, armas.cusnam, armas.addr01, armas.addr02, armas.addr03, armas.zipcod, armas.telnum From artrn Left Join armas On artrn.cuscod = armas.cuscod Where TRIM(docnum)='" + docnum.Trim() + "'";
                 using (OleDbDataAdapter da = new OleDbDataAdapter(cmd))
                 {
                     dt.Clear();
@@ -289,6 +268,7 @@ namespace Num2Serial.Helper
                         sonum = !dt.Rows[0].IsNull("sonum") ? dt.Rows[0]["sonum"].ToString().Trim() : string.Empty,
                         telnum = !dt.Rows[0].IsNull("telnum") ? dt.Rows[0]["telnum"].ToString().Trim() : string.Empty,
                         zipcod = !dt.Rows[0].IsNull("zipcod") ? dt.Rows[0]["zipcod"].ToString().Trim() : string.Empty,
+                        num2 = !dt.Rows[0].IsNull("num2") ? (double)dt.Rows[0]["num2"] : 0
                     };
 
                 }
@@ -384,6 +364,7 @@ namespace Num2Serial.Helper
         public string addr03 { get; set; }
         public string zipcod { get; set; }
         public string telnum { get; set; }
+        public double num2 { get; set; }
     }
 
     public class StcrdMin

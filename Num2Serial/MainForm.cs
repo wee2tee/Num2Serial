@@ -23,7 +23,7 @@ namespace Num2Serial
         public Invoice curr_invoice = null;
         private BindingList<ArtrnMin> iv_list;
         private BindingList<ArtrnMin> hs_list;
-        private bool only_new_iv = true;
+        private TransactionStatus.STATUS status;
         private FORM_MODE form_mode;
 
         public MainForm(string data_path = null)
@@ -78,7 +78,10 @@ namespace Num2Serial
                     this.data_path = comp.selected_comp.RewriteDataPath();
                     this.lblDataPath.Text = this.data_path.TrimEnd('\\') + "   [" + comp.selected_comp.compnam + "]";
 
-                    this.iv_list =  new BindingList<ArtrnMin>(DbfTable.InvoiceList(this.data_path, this.only_new_iv, DbfTable.INVOICE_TYPE.IV));
+                    this.LoadStatusComboboxItem();
+                    this.cbStatus.SelectedItem = this.cbStatus.Items.Cast<ComboboxItem>().Where(i => ((TransactionStatus.STATUS)i.Value) == TransactionStatus.STATUS.WARRANTY).First();
+
+                    this.iv_list =  new BindingList<ArtrnMin>(DbfTable.InvoiceList(this.data_path, this.status, DbfTable.INVOICE_TYPE.IV));
                     this.dgvIV.DataSource = this.iv_list;
                     this.tabIV.Text = "  ขายเชื่อ (" + this.iv_list.Count.ToString() + ")  ";
                 }
@@ -89,18 +92,19 @@ namespace Num2Serial
             }
         }
 
+        private void LoadStatusComboboxItem()
+        {
+            this.cbStatus.Items.Add(new ComboboxItem { Text = TransactionStatus.All, Value = TransactionStatus.STATUS.ALL });
+            this.cbStatus.Items.Add(new ComboboxItem { Text = TransactionStatus.Warranty, Value = TransactionStatus.STATUS.WARRANTY });
+            this.cbStatus.Items.Add(new ComboboxItem { Text = TransactionStatus.Warranted, Value = TransactionStatus.STATUS.WARRANTED });
+        }
+
         private void ResetFormState(FORM_MODE form_mode)
         {
             this.form_mode = form_mode;
 
-            this.btnItem.SetControlState(new FORM_MODE[] { FORM_MODE.READ }, form_mode);
-            this.btnSave.SetControlState(new FORM_MODE[] { FORM_MODE.EDIT }, form_mode);
-            this.btnStop.SetControlState(new FORM_MODE[] { FORM_MODE.EDIT }, form_mode);
-            this.btnWarrantyOK.SetControlState(new FORM_MODE[] { FORM_MODE.READ }, form_mode);
             this.dgvIV.SetControlState(new FORM_MODE[] { FORM_MODE.READ }, form_mode);
             this.dgvHS.SetControlState(new FORM_MODE[] { FORM_MODE.READ }, form_mode);
-            this.cbWarranty.SetControlState(new FORM_MODE[] { FORM_MODE.READ }, form_mode);
-            this.cbWarranted.SetControlState(new FORM_MODE[] { FORM_MODE.READ }, form_mode);
         }
 
         private bool TestSecurePath()
@@ -162,6 +166,7 @@ namespace Num2Serial
                 this.lblDocnum.Text = inv.artrn.docnum;
                 this.lblSonum.Text = inv.artrn.sonum;
                 this.lblSlmcod.Text = inv.artrn.slmcod;
+                this.lblStatus.Visible = inv.artrn.num2 > 0 ? true : false;
 
                 this.dgvSTCRD.DataSource = inv.stcrds;
             }
@@ -181,7 +186,8 @@ namespace Num2Serial
                         docnum = string.Empty,
                         slmcod = string.Empty,
                         sonum = string.Empty,
-                        telnum = string.Empty
+                        telnum = string.Empty,
+                        num2 = 0
                     },
                     stcrds = new List<StcrdMinVM>()
                 };
@@ -190,37 +196,17 @@ namespace Num2Serial
             }
         }
 
-        private void cbWarranty_CheckedChanged(object sender, EventArgs e)
-        {
-            this.only_new_iv = ((CheckBox)sender).Checked;
-
-            if(this.tabControl2.SelectedTab == this.tabIV)
-            {
-                this.iv_list = new BindingList<ArtrnMin>(DbfTable.InvoiceList(this.data_path, this.only_new_iv, DbfTable.INVOICE_TYPE.IV));
-                this.dgvIV.DataSource = this.iv_list;
-                this.tabIV.Text = "  ขายเชื่อ (" + this.iv_list.Count.ToString() + ")  ";
-            }
-            else
-            {
-                this.hs_list = new BindingList<ArtrnMin>(DbfTable.InvoiceList(this.data_path, this.only_new_iv, DbfTable.INVOICE_TYPE.HS));
-                this.dgvHS.DataSource = this.hs_list;
-                this.tabHS.Text = "  ขายสด (" + this.hs_list.Count.ToString() + ")  ";
-            }
-        }
-
         private void tabControl2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if(((TabControl)sender).SelectedTab == this.tabIV)
+            this.GetInvoiceList();
+
+            if (((TabControl)sender).SelectedTab == this.tabIV)
             {
-                this.iv_list = new BindingList<ArtrnMin>(DbfTable.InvoiceList(this.data_path, this.only_new_iv, DbfTable.INVOICE_TYPE.IV));
-                this.dgvIV.DataSource = this.iv_list;
-                this.tabIV.Text = "  ขายเชื่อ (" + this.iv_list.Count.ToString() + ")  ";
+                this.dgvIV_CurrentCellChanged(this.dgvIV, e);
             }
             else
             {
-                this.hs_list = new BindingList<ArtrnMin>(DbfTable.InvoiceList(this.data_path, this.only_new_iv, DbfTable.INVOICE_TYPE.HS));
-                this.dgvHS.DataSource = this.hs_list;
-                this.tabHS.Text = "  ขายสด (" + this.hs_list.Count.ToString() + ")  ";
+                this.dgvIV_CurrentCellChanged(this.dgvHS, e);
             }
         }
 
@@ -235,9 +221,29 @@ namespace Num2Serial
                     e.Handled = true;
                 }
             }
+            else
+            {
+                if(((DataGridView)sender).Columns[e.ColumnIndex].Name == this.col_iv_warranty_spec.Name || ((DataGridView)sender).Columns[e.ColumnIndex].Name == this.col_hs_warranty_spec.Name)
+                {
+                    var warranted = (string)((DataGridView)sender).Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+
+                    if(warranted != "Y")
+                    {
+                        e.Paint(e.CellBounds, DataGridViewPaintParts.Background | DataGridViewPaintParts.Border | DataGridViewPaintParts.ContentBackground);
+                        Rectangle rect = new Rectangle(e.CellBounds.X + 5, e.CellBounds.Y + 5, 16, 16);
+                        e.Graphics.DrawImage((Image)Num2Serial.Properties.Resources.stamp, rect);
+                        e.Handled = true;
+                    }
+                    else
+                    {
+                        e.Paint(e.CellBounds, DataGridViewPaintParts.Background | DataGridViewPaintParts.Border);
+                        e.Handled = true;
+                    }
+                }
+            }
         }
 
-        private void dgvSTCRD_Paint(object sender, PaintEventArgs e)
+        private void dgv_PaintFocusedRow(object sender, PaintEventArgs e)
         {
             if (((DataGridView)sender).CurrentCell == null)
                 return;
@@ -263,24 +269,37 @@ namespace Num2Serial
                 DialogWarranty war = new DialogWarranty(this, st);
                 if(war.ShowDialog() == DialogResult.OK)
                 {
+                    if (this.tabControl2.SelectedTab == this.tabIV)
+                    {
+                        this.curr_invoice = DbfTable.InVoice(this.data_path, this.curr_invoice.artrn.docnum.Trim());
+                    }
+                    else
+                    {
+                        this.curr_invoice = DbfTable.InVoice(this.data_path, this.curr_invoice.artrn.docnum.Trim());
+                    }
 
+                    this.FillForm(this.curr_invoice);
+
+                    if (this.dgvSTCRD.Rows.Count > 0)
+                        this.dgvSTCRD.Rows.Cast<DataGridViewRow>().Where(r => ((StcrdMin)r.Cells[this.col_stcrdmin.Name].Value).seqnum == st.seqnum).First().Cells[this.col_stkcod.Name].Selected = true;
                 }
             }
         }
 
-        private void btnWarrantyOK_Click(object sender, EventArgs e)
+        private void GetInvoiceList()
         {
-            var reindex_result = this.Reindex();
-            
-            if (reindex_result.success)
+            if (this.tabControl2.SelectedTab == this.tabIV)
             {
-                MessageBox.Show("It's OK");
+                this.iv_list = new BindingList<ArtrnMin>(DbfTable.InvoiceList(this.data_path, this.status, DbfTable.INVOICE_TYPE.IV));
+                this.dgvIV.DataSource = this.iv_list;
+                this.tabIV.Text = "  ขายเชื่อ (" + this.iv_list.Count.ToString() + ")  ";
             }
             else
             {
-                MessageBox.Show(reindex_result.err_message);
+                this.hs_list = new BindingList<ArtrnMin>(DbfTable.InvoiceList(this.data_path, this.status, DbfTable.INVOICE_TYPE.HS));
+                this.dgvHS.DataSource = this.hs_list;
+                this.tabHS.Text = "  ขายสด (" + this.hs_list.Count.ToString() + ")  ";
             }
-
         }
 
         public ReIndexResult Reindex()
@@ -335,6 +354,53 @@ namespace Num2Serial
             result.success = true;
 
             return result;
+        }
+
+        private void cbStatus_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.status = (TransactionStatus.STATUS)((ComboboxItem)((ComboBox)sender).SelectedItem).Value;
+            this.GetInvoiceList();
+        }
+
+        private void dgvIV_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex == -1)
+                return;
+
+            if(((DataGridView)sender).Columns[e.ColumnIndex].Name == this.col_hs_warranty_spec.Name || ((DataGridView)sender).Columns[e.ColumnIndex].Name == this.col_iv_warranty_spec.Name)
+            {
+                var warranted = (string)((DataGridView)sender).Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
+                if(warranted != "Y")
+                {
+                    //MessageBox.Show(this.curr_invoice.artrn.docnum);
+
+                    if (MessageBox.Show("ทำเครื่องหมายว่า " + this.curr_invoice.artrn.docnum + " ได้บันทึกอายุรับประกันแล้ว, ทำต่อหรือไม่?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+                    {
+                        try
+                        {
+                            using (OleDbConnection conn = new OleDbConnection(@"Provider=VFPOLEDB.1;Data Source=" + this.data_path))
+                            {
+                                conn.Open();
+                                using (OleDbCommand cmd = conn.CreateCommand())
+                                {
+
+                                    cmd.CommandText = "Update artrn Set num2=1.99 Where TRIM(docnum)='" + this.curr_invoice.artrn.docnum.Trim() + "'";
+                                    int affected = cmd.ExecuteNonQuery();
+                                    if(affected > 0)
+                                    {
+                                        this.tabControl2_SelectedIndexChanged(this.tabControl2, e);
+                                    }
+                                }
+                                conn.Close();
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                }
+            }
         }
     }
 }

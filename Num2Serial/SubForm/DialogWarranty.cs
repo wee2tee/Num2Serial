@@ -26,16 +26,16 @@ namespace Num2Serial.SubForm
 
         private void DialogWarranty_Load(object sender, EventArgs e)
         {
-            this.cbWarType.Items.Add(new ComboboxItem { value = WarrantyType.TYPE.DEFAULT, Text = WarrantyType.Default });
-            this.cbWarType.Items.Add(new ComboboxItem { value = WarrantyType.TYPE.SPECIFY, Text = WarrantyType.Specify });
+            this.cbWarType.Items.Add(new ComboboxItem { Value = WarrantyType.TYPE.DEFAULT, Text = WarrantyType.Default });
+            this.cbWarType.Items.Add(new ComboboxItem { Value = WarrantyType.TYPE.SPECIFY, Text = WarrantyType.Specify });
 
-            this.cbWarType.SelectedItem = this.cbWarType.Items.Cast<ComboboxItem>().Where(i => (WarrantyType.TYPE)i.value == this.stcrdmin.warranty_type).FirstOrDefault();
+            this.cbWarType.SelectedItem = this.cbWarType.Items.Cast<ComboboxItem>().Where(i => (WarrantyType.TYPE)i.Value == this.stcrdmin.warranty_type).FirstOrDefault();
             this.numWarMonth.Value = this.stcrdmin.warranty_period;
         }
 
         private void cbWarType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if((WarrantyType.TYPE)((ComboboxItem)((ComboBox)sender).SelectedItem).value == WarrantyType.TYPE.DEFAULT)
+            if((WarrantyType.TYPE)((ComboboxItem)((ComboBox)sender).SelectedItem).Value == WarrantyType.TYPE.DEFAULT)
             {
                 this.numWarMonth.Value = this.stcrdmin.warranty_default;
                 this.numWarMonth.Enabled = false;
@@ -94,7 +94,7 @@ namespace Num2Serial.SubForm
                         }
                     }
 
-                    cmd.CommandText = "Select artrnrm.docnum, artrnrm.seqnum, artrnrm.remark From artrnrm Where SUBSTR(artrnrm.seqnum,1,3)='" + this.stcrdmin.seqnum + "' ";
+                    cmd.CommandText = "Select artrnrm.docnum, artrnrm.seqnum, artrnrm.remark From artrnrm Where TRIM(docnum)='" + this.stcrdmin.docnum.Trim() + "' AND SUBSTR(artrnrm.seqnum,1,3)='" + this.stcrdmin.seqnum + "' ";
                     using (OleDbDataAdapter da = new OleDbDataAdapter(cmd))
                     {
                         dt.Clear();
@@ -142,14 +142,14 @@ namespace Num2Serial.SubForm
                             }
 
                             /* Update ARTRNRM */
-                            conn.Open();
-                            using (OleDbCommand cmd = conn.CreateCommand())
+                            if (artrnrm.Count == 15 && artrnrm[14].remark.ToLower().StartsWith("warranty."))
                             {
-                                cmd.CommandText = "Delete From artrnrm Where TRIM(docnum)='" + this.stcrdmin.docnum + "' AND SUBSTR(seqnum,1,3)='" + this.stcrdmin.seqnum + "'";
-                                cmd.ExecuteNonQuery();
-
-                                if(artrnrm.Count == 15 && artrnrm[14].remark.ToLower().StartsWith("warranty."))
+                                conn.Open();
+                                using (OleDbCommand cmd = conn.CreateCommand())
                                 {
+                                    cmd.CommandText = "Delete From artrnrm Where TRIM(docnum)='" + this.stcrdmin.docnum + "' AND SUBSTR(seqnum,1,3)='" + this.stcrdmin.seqnum + "'";
+                                    cmd.ExecuteNonQuery();
+
                                     int max_rem = 0;
                                     for (int i = 0; i < 14; i++)
                                     {
@@ -162,11 +162,14 @@ namespace Num2Serial.SubForm
                                         cmd.ExecuteNonQuery();
                                     }
                                 }
+                                conn.Close();
 
-                                //cmd.CommandText = "Insert into artrnrm (docnum, seqnum, remark) Values('" + this.stcrdmin.docnum.PadRight(12) + "', '" + this.stcrdmin.seqnum.PadRight(13) + "', 'WARRANTY." + this.stcrdmin.warranty_period.ToString() + "')";
-                                //cmd.ExecuteNonQuery();
+                                var reindex_result = this.main_form.Reindex();
+                                if (!reindex_result.success)
+                                {
+                                    MessageBox.Show("แฟ้ม Artrnrm.dbf มีผู้ใช้งานอยู่ ไม่สามารถสร้างแฟ้มดัชนีใหม่ได้ในขณะนี้,\nกรุณาจัดเรียงข้อมูลอีกครั้งในภายหลัง");
+                                }
                             }
-                            conn.Close();
 
                             this.DialogResult = DialogResult.OK;
                             this.Close();
@@ -208,9 +211,19 @@ namespace Num2Serial.SubForm
                             conn.Open();
                             using (OleDbCommand cmd = conn.CreateCommand())
                             {
-                                for (int i = 0; i < 14 - artrnrm.Count; i++)
+                                cmd.CommandText = "Delete From artrnrm Where TRIM(docnum)='" + this.stcrdmin.docnum.Trim() + "' AND SUBSTR(seqnum,1,3)='" + this.stcrdmin.seqnum + "'";
+                                cmd.ExecuteNonQuery();
+
+                                for (int i = 0; i < 14; i++)
                                 {
-                                    cmd.CommandText = "Insert into artrnrm (docnum, seqnum, remark) Values('" + this.stcrdmin.docnum.PadRight(12) + "', '" + this.stcrdmin.seqnum.PadRight(13) + "', '')";
+                                    if(artrnrm.Count - 1 >= i)
+                                    {
+                                        cmd.CommandText = "Insert into artrnrm (docnum, seqnum, remark) Values('" + this.stcrdmin.docnum.PadRight(12) + "', '" + this.stcrdmin.seqnum.PadRight(13) + "', '" + artrnrm[i].remark + "')";
+                                    }
+                                    else
+                                    {
+                                        cmd.CommandText = "Insert into artrnrm (docnum, seqnum, remark) Values('" + this.stcrdmin.docnum.PadRight(12) + "', '" + this.stcrdmin.seqnum.PadRight(13) + "', '')";
+                                    }
                                     cmd.ExecuteNonQuery();
                                 }
 
@@ -218,6 +231,12 @@ namespace Num2Serial.SubForm
                                 cmd.ExecuteNonQuery();
                             }
                             conn.Close();
+
+                            var reindex_result = this.main_form.Reindex();
+                            if (!reindex_result.success)
+                            {
+                                MessageBox.Show("แฟ้ม Artrnrm.dbf มีผู้ใช้งานอยู่ ไม่สามารถสร้างแฟ้มดัชนีใหม่ได้ในขณะนี้,\nกรุณาจัดเรียงข้อมูลอีกครั้งในภายหลัง");
+                            }
 
                             this.DialogResult = DialogResult.OK;
                             this.Close();

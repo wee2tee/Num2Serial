@@ -12,6 +12,19 @@ namespace Num2Serial.Helper
         public static Color COL_HEADER_BG = Color.FromArgb(209, 149, 109);
     }
 
+    public class TransactionStatus
+    {
+        public enum STATUS
+        {
+            ALL,
+            WARRANTY,
+            WARRANTED
+        }
+        public const string All = "รายการทั้งหมด";
+        public const string Warranty = "รายการที่ยังไม่ได้บันทึกอายุรับประกัน";
+        public const string Warranted = "รายการที่ทำเครื่องหมายว่าบันทึกอายุรับประกันแล้ว";
+    }
+
     public class WarrantyType
     {
         public enum TYPE
@@ -25,7 +38,7 @@ namespace Num2Serial.Helper
 
     public class ComboboxItem
     {
-        public object value { get; set; }
+        public object Value { get; set; }
         public string Text { get; set; }
         public override string ToString()
         {
