@@ -1,4 +1,4 @@
-﻿namespace Num2Serial
+﻿namespace Warranty
 {
     partial class MainForm
     {
@@ -28,29 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle14 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle13 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle20 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle19 = new System.Windows.Forms.DataGridViewCellStyle();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblDataPath = new System.Windows.Forms.ToolStripStatusLabel();
             this.dgvIV = new System.Windows.Forms.DataGridView();
-            this.col_iv_docdat = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_iv_docnum = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_iv_cuscod = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_iv_warranty_spec = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.col_iv_cusnam = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.dgvSTCRD = new System.Windows.Forms.DataGridView();
-            this.col_stkcod = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_stkdes = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_warranty_type = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.col_warranty_period = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_trnqty = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_tqucod = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_stcrdmin = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label2 = new System.Windows.Forms.Label();
             this.cbStatus = new System.Windows.Forms.ComboBox();
@@ -58,12 +49,8 @@
             this.tabIV = new System.Windows.Forms.TabPage();
             this.tabHS = new System.Windows.Forms.TabPage();
             this.dgvHS = new System.Windows.Forms.DataGridView();
-            this.col_hs_docdat = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_hs_docnum = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_hs_cuscod = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.col_hs_warranty_spec = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.col_hs_cusnam = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.lblStatus = new System.Windows.Forms.Label();
             this.lblSlmcod = new System.Windows.Forms.Label();
             this.lblSonum = new System.Windows.Forms.Label();
             this.lblDocdat = new System.Windows.Forms.Label();
@@ -78,7 +65,24 @@
             this.lblCusnam = new System.Windows.Forms.Label();
             this.lblTelnum = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.lblStatus = new System.Windows.Forms.Label();
+            this.col_hs_docdat = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_hs_docnum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_hs_cuscod = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_hs_warranty_spec = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.col_hs_cusnam = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_iv_docdat = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_iv_docnum = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_iv_cuscod = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_iv_warranty_spec = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.col_iv_cusnam = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_seq = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_stkcod = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_stkdes = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_warranty_type = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.col_warranty_period = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_trnqty = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_tqucod = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.col_stcrdmin = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvIV)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -131,14 +135,14 @@
             this.col_iv_cuscod,
             this.col_iv_warranty_spec,
             this.col_iv_cusnam});
-            dataGridViewCellStyle14.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle14.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle14.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            dataGridViewCellStyle14.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle14.SelectionBackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle14.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle14.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvIV.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle16.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle16.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            dataGridViewCellStyle16.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle16.SelectionBackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle16.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvIV.DefaultCellStyle = dataGridViewCellStyle16;
             this.dgvIV.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvIV.EnableHeadersVisualStyles = false;
             this.dgvIV.Location = new System.Drawing.Point(3, 3);
@@ -148,58 +152,15 @@
             this.dgvIV.RowTemplate.Height = 25;
             this.dgvIV.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvIV.Size = new System.Drawing.Size(330, 495);
+            this.dgvIV.StandardTab = true;
             this.dgvIV.TabIndex = 2;
             this.dgvIV.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvIV_CellContentClick);
+            this.dgvIV.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvIV_CellFormatting);
             this.dgvIV.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvIV_CellPainting);
             this.dgvIV.CurrentCellChanged += new System.EventHandler(this.dgvIV_CurrentCellChanged);
             this.dgvIV.Paint += new System.Windows.Forms.PaintEventHandler(this.dgv_PaintFocusedRow);
-            // 
-            // col_iv_docdat
-            // 
-            this.col_iv_docdat.DataPropertyName = "docdat";
-            dataGridViewCellStyle13.Format = "dd/MM/yyyy";
-            this.col_iv_docdat.DefaultCellStyle = dataGridViewCellStyle13;
-            this.col_iv_docdat.HeaderText = "วันที่";
-            this.col_iv_docdat.MinimumWidth = 85;
-            this.col_iv_docdat.Name = "col_iv_docdat";
-            this.col_iv_docdat.ReadOnly = true;
-            this.col_iv_docdat.Width = 85;
-            // 
-            // col_iv_docnum
-            // 
-            this.col_iv_docnum.DataPropertyName = "docnum";
-            this.col_iv_docnum.HeaderText = "เลขที่";
-            this.col_iv_docnum.MinimumWidth = 100;
-            this.col_iv_docnum.Name = "col_iv_docnum";
-            this.col_iv_docnum.ReadOnly = true;
-            // 
-            // col_iv_cuscod
-            // 
-            this.col_iv_cuscod.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.col_iv_cuscod.DataPropertyName = "cuscod";
-            this.col_iv_cuscod.HeaderText = "รหัสลูกค้า";
-            this.col_iv_cuscod.Name = "col_iv_cuscod";
-            this.col_iv_cuscod.ReadOnly = true;
-            // 
-            // col_iv_warranty_spec
-            // 
-            this.col_iv_warranty_spec.DataPropertyName = "warranty_spec";
-            this.col_iv_warranty_spec.HeaderText = "War.";
-            this.col_iv_warranty_spec.MinimumWidth = 30;
-            this.col_iv_warranty_spec.Name = "col_iv_warranty_spec";
-            this.col_iv_warranty_spec.ReadOnly = true;
-            this.col_iv_warranty_spec.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.col_iv_warranty_spec.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.col_iv_warranty_spec.ToolTipText = "ทำเครื่องหมายว่าบันทึกอายุรับประกันแล้ว";
-            this.col_iv_warranty_spec.Width = 30;
-            // 
-            // col_iv_cusnam
-            // 
-            this.col_iv_cusnam.DataPropertyName = "cusnam";
-            this.col_iv_cusnam.HeaderText = "ชื่อลูกค้า";
-            this.col_iv_cusnam.Name = "col_iv_cusnam";
-            this.col_iv_cusnam.ReadOnly = true;
-            this.col_iv_cusnam.Visible = false;
+            this.dgvIV.Enter += new System.EventHandler(this.dgvIV_Enter);
+            this.dgvIV.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dgvIV_MouseClick);
             // 
             // tabControl1
             // 
@@ -220,7 +181,7 @@
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Size = new System.Drawing.Size(810, 430);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "รายการสินค้าในบิล (เฉพาะที่คุม Serial)";
+            this.tabPage1.Text = "รายการสินค้าในบิล (เฉพาะที่คุม Serial Number) <F8>";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // dgvSTCRD
@@ -231,6 +192,7 @@
             this.dgvSTCRD.ColumnHeadersHeight = 28;
             this.dgvSTCRD.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgvSTCRD.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.col_seq,
             this.col_stkcod,
             this.col_stkdes,
             this.col_warranty_type,
@@ -238,14 +200,14 @@
             this.col_trnqty,
             this.col_tqucod,
             this.col_stcrdmin});
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle15.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle15.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            dataGridViewCellStyle15.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle15.SelectionBackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle15.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle15.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvSTCRD.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle20.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle20.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle20.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            dataGridViewCellStyle20.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle20.SelectionBackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle20.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle20.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvSTCRD.DefaultCellStyle = dataGridViewCellStyle20;
             this.dgvSTCRD.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvSTCRD.EnableHeadersVisualStyles = false;
             this.dgvSTCRD.Location = new System.Drawing.Point(0, 0);
@@ -255,73 +217,15 @@
             this.dgvSTCRD.RowTemplate.Height = 25;
             this.dgvSTCRD.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvSTCRD.Size = new System.Drawing.Size(810, 430);
+            this.dgvSTCRD.StandardTab = true;
             this.dgvSTCRD.TabIndex = 3;
             this.dgvSTCRD.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSTCRD_CellContentClick);
+            this.dgvSTCRD.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSTCRD_CellDoubleClick);
+            this.dgvSTCRD.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvSTCRD_CellFormatting);
+            this.dgvSTCRD.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvSTCRD_CellPainting);
             this.dgvSTCRD.Paint += new System.Windows.Forms.PaintEventHandler(this.dgv_PaintFocusedRow);
-            // 
-            // col_stkcod
-            // 
-            this.col_stkcod.DataPropertyName = "stkcod";
-            this.col_stkcod.HeaderText = "รหัสสินค้า";
-            this.col_stkcod.MinimumWidth = 150;
-            this.col_stkcod.Name = "col_stkcod";
-            this.col_stkcod.ReadOnly = true;
-            this.col_stkcod.Width = 150;
-            // 
-            // col_stkdes
-            // 
-            this.col_stkdes.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.col_stkdes.DataPropertyName = "stkdes";
-            this.col_stkdes.HeaderText = "รายละเอียด";
-            this.col_stkdes.MinimumWidth = 140;
-            this.col_stkdes.Name = "col_stkdes";
-            this.col_stkdes.ReadOnly = true;
-            // 
-            // col_warranty_type
-            // 
-            this.col_warranty_type.DataPropertyName = "warranty_type";
-            this.col_warranty_type.HeaderText = "Warranty Type";
-            this.col_warranty_type.MinimumWidth = 140;
-            this.col_warranty_type.Name = "col_warranty_type";
-            this.col_warranty_type.ReadOnly = true;
-            this.col_warranty_type.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.col_warranty_type.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.col_warranty_type.Width = 140;
-            // 
-            // col_warranty_period
-            // 
-            this.col_warranty_period.DataPropertyName = "warranty_period";
-            this.col_warranty_period.HeaderText = "อายุรับประกัน (เดือน)";
-            this.col_warranty_period.MinimumWidth = 130;
-            this.col_warranty_period.Name = "col_warranty_period";
-            this.col_warranty_period.ReadOnly = true;
-            this.col_warranty_period.Width = 130;
-            // 
-            // col_trnqty
-            // 
-            this.col_trnqty.DataPropertyName = "trnqty";
-            this.col_trnqty.HeaderText = "จำนวน";
-            this.col_trnqty.MinimumWidth = 100;
-            this.col_trnqty.Name = "col_trnqty";
-            this.col_trnqty.ReadOnly = true;
-            // 
-            // col_tqucod
-            // 
-            this.col_tqucod.DataPropertyName = "tqucod";
-            this.col_tqucod.HeaderText = "";
-            this.col_tqucod.MinimumWidth = 30;
-            this.col_tqucod.Name = "col_tqucod";
-            this.col_tqucod.ReadOnly = true;
-            this.col_tqucod.Width = 30;
-            // 
-            // col_stcrdmin
-            // 
-            this.col_stcrdmin.DataPropertyName = "stcrdmin";
-            this.col_stcrdmin.HeaderText = "StcrdMin";
-            this.col_stcrdmin.MinimumWidth = 100;
-            this.col_stcrdmin.Name = "col_stcrdmin";
-            this.col_stcrdmin.ReadOnly = true;
-            this.col_stcrdmin.Visible = false;
+            this.dgvSTCRD.Enter += new System.EventHandler(this.dgvSTCRD_Enter);
+            this.dgvSTCRD.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dgvSTCRD_MouseClick);
             // 
             // groupBox1
             // 
@@ -377,7 +281,7 @@
             this.tabIV.Padding = new System.Windows.Forms.Padding(3);
             this.tabIV.Size = new System.Drawing.Size(336, 501);
             this.tabIV.TabIndex = 0;
-            this.tabIV.Text = "  ขายเชื่อ  ";
+            this.tabIV.Text = "  ขายเชื่อ <F6>  ";
             this.tabIV.UseVisualStyleBackColor = true;
             // 
             // tabHS
@@ -388,7 +292,7 @@
             this.tabHS.Padding = new System.Windows.Forms.Padding(3);
             this.tabHS.Size = new System.Drawing.Size(336, 501);
             this.tabHS.TabIndex = 1;
-            this.tabHS.Text = "  ขายสด  ";
+            this.tabHS.Text = "  ขายสด <F7>  ";
             this.tabHS.UseVisualStyleBackColor = true;
             // 
             // dgvHS
@@ -405,14 +309,14 @@
             this.col_hs_cuscod,
             this.col_hs_warranty_spec,
             this.col_hs_cusnam});
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle16.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle16.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            dataGridViewCellStyle16.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle16.SelectionBackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle16.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle16.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dgvHS.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle21.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle21.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            dataGridViewCellStyle21.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle21.SelectionBackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle21.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle21.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgvHS.DefaultCellStyle = dataGridViewCellStyle21;
             this.dgvHS.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvHS.EnableHeadersVisualStyles = false;
             this.dgvHS.Location = new System.Drawing.Point(3, 3);
@@ -422,56 +326,15 @@
             this.dgvHS.RowTemplate.Height = 25;
             this.dgvHS.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvHS.Size = new System.Drawing.Size(330, 495);
+            this.dgvHS.StandardTab = true;
             this.dgvHS.TabIndex = 3;
             this.dgvHS.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvIV_CellContentClick);
+            this.dgvHS.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvIV_CellFormatting);
             this.dgvHS.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgvIV_CellPainting);
             this.dgvHS.CurrentCellChanged += new System.EventHandler(this.dgvIV_CurrentCellChanged);
             this.dgvHS.Paint += new System.Windows.Forms.PaintEventHandler(this.dgv_PaintFocusedRow);
-            // 
-            // col_hs_docdat
-            // 
-            this.col_hs_docdat.DataPropertyName = "docdat";
-            this.col_hs_docdat.HeaderText = "วันที่";
-            this.col_hs_docdat.MinimumWidth = 85;
-            this.col_hs_docdat.Name = "col_hs_docdat";
-            this.col_hs_docdat.ReadOnly = true;
-            this.col_hs_docdat.Width = 85;
-            // 
-            // col_hs_docnum
-            // 
-            this.col_hs_docnum.DataPropertyName = "docnum";
-            this.col_hs_docnum.HeaderText = "เลขที่";
-            this.col_hs_docnum.MinimumWidth = 100;
-            this.col_hs_docnum.Name = "col_hs_docnum";
-            this.col_hs_docnum.ReadOnly = true;
-            // 
-            // col_hs_cuscod
-            // 
-            this.col_hs_cuscod.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.col_hs_cuscod.DataPropertyName = "cuscod";
-            this.col_hs_cuscod.HeaderText = "รหัสลูกค้า";
-            this.col_hs_cuscod.Name = "col_hs_cuscod";
-            this.col_hs_cuscod.ReadOnly = true;
-            // 
-            // col_hs_warranty_spec
-            // 
-            this.col_hs_warranty_spec.DataPropertyName = "warranty_spec";
-            this.col_hs_warranty_spec.HeaderText = "War.";
-            this.col_hs_warranty_spec.MinimumWidth = 30;
-            this.col_hs_warranty_spec.Name = "col_hs_warranty_spec";
-            this.col_hs_warranty_spec.ReadOnly = true;
-            this.col_hs_warranty_spec.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.col_hs_warranty_spec.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.col_hs_warranty_spec.ToolTipText = "ทำเครื่องหมายว่าบันทึกอายุรับประกันแล้ว";
-            this.col_hs_warranty_spec.Width = 30;
-            // 
-            // col_hs_cusnam
-            // 
-            this.col_hs_cusnam.DataPropertyName = "cusnam";
-            this.col_hs_cusnam.HeaderText = "ชื่อลูกค้า";
-            this.col_hs_cusnam.Name = "col_hs_cusnam";
-            this.col_hs_cusnam.ReadOnly = true;
-            this.col_hs_cusnam.Visible = false;
+            this.dgvHS.Enter += new System.EventHandler(this.dgvIV_Enter);
+            this.dgvHS.MouseClick += new System.Windows.Forms.MouseEventHandler(this.dgvIV_MouseClick);
             // 
             // panel1
             // 
@@ -497,6 +360,19 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(814, 157);
             this.panel1.TabIndex = 6;
+            // 
+            // lblStatus
+            // 
+            this.lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblStatus.AutoSize = true;
+            this.lblStatus.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
+            this.lblStatus.ForeColor = System.Drawing.Color.Blue;
+            this.lblStatus.Location = new System.Drawing.Point(621, 9);
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(167, 18);
+            this.lblStatus.TabIndex = 2;
+            this.lblStatus.Text = "บันทึกอายุรับประกันแล้ว";
+            this.lblStatus.Visible = false;
             // 
             // lblSlmcod
             // 
@@ -641,18 +517,178 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "รหัสลูกค้า";
             // 
-            // lblStatus
+            // col_hs_docdat
             // 
-            this.lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblStatus.AutoSize = true;
-            this.lblStatus.Font = new System.Drawing.Font("Tahoma", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
-            this.lblStatus.ForeColor = System.Drawing.Color.Blue;
-            this.lblStatus.Location = new System.Drawing.Point(527, 9);
-            this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(282, 18);
-            this.lblStatus.TabIndex = 2;
-            this.lblStatus.Text = "ทำเครื่องหมายว่าบันทึกอายุรับประกันแล้ว";
-            this.lblStatus.Visible = false;
+            this.col_hs_docdat.DataPropertyName = "docdat";
+            this.col_hs_docdat.HeaderText = "วันที่";
+            this.col_hs_docdat.MinimumWidth = 85;
+            this.col_hs_docdat.Name = "col_hs_docdat";
+            this.col_hs_docdat.ReadOnly = true;
+            this.col_hs_docdat.Width = 85;
+            // 
+            // col_hs_docnum
+            // 
+            this.col_hs_docnum.DataPropertyName = "docnum";
+            this.col_hs_docnum.HeaderText = "เลขที่";
+            this.col_hs_docnum.MinimumWidth = 100;
+            this.col_hs_docnum.Name = "col_hs_docnum";
+            this.col_hs_docnum.ReadOnly = true;
+            // 
+            // col_hs_cuscod
+            // 
+            this.col_hs_cuscod.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.col_hs_cuscod.DataPropertyName = "cuscod";
+            this.col_hs_cuscod.HeaderText = "รหัสลูกค้า";
+            this.col_hs_cuscod.Name = "col_hs_cuscod";
+            this.col_hs_cuscod.ReadOnly = true;
+            // 
+            // col_hs_warranty_spec
+            // 
+            this.col_hs_warranty_spec.DataPropertyName = "warranty_spec";
+            this.col_hs_warranty_spec.HeaderText = "War.";
+            this.col_hs_warranty_spec.MinimumWidth = 30;
+            this.col_hs_warranty_spec.Name = "col_hs_warranty_spec";
+            this.col_hs_warranty_spec.ReadOnly = true;
+            this.col_hs_warranty_spec.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.col_hs_warranty_spec.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.col_hs_warranty_spec.Width = 30;
+            // 
+            // col_hs_cusnam
+            // 
+            this.col_hs_cusnam.DataPropertyName = "cusnam";
+            this.col_hs_cusnam.HeaderText = "ชื่อลูกค้า";
+            this.col_hs_cusnam.Name = "col_hs_cusnam";
+            this.col_hs_cusnam.ReadOnly = true;
+            this.col_hs_cusnam.Visible = false;
+            // 
+            // col_iv_docdat
+            // 
+            this.col_iv_docdat.DataPropertyName = "docdat";
+            dataGridViewCellStyle15.Format = "dd/MM/yyyy";
+            this.col_iv_docdat.DefaultCellStyle = dataGridViewCellStyle15;
+            this.col_iv_docdat.HeaderText = "วันที่";
+            this.col_iv_docdat.MinimumWidth = 85;
+            this.col_iv_docdat.Name = "col_iv_docdat";
+            this.col_iv_docdat.ReadOnly = true;
+            this.col_iv_docdat.Width = 85;
+            // 
+            // col_iv_docnum
+            // 
+            this.col_iv_docnum.DataPropertyName = "docnum";
+            this.col_iv_docnum.HeaderText = "เลขที่";
+            this.col_iv_docnum.MinimumWidth = 100;
+            this.col_iv_docnum.Name = "col_iv_docnum";
+            this.col_iv_docnum.ReadOnly = true;
+            // 
+            // col_iv_cuscod
+            // 
+            this.col_iv_cuscod.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.col_iv_cuscod.DataPropertyName = "cuscod";
+            this.col_iv_cuscod.HeaderText = "รหัสลูกค้า";
+            this.col_iv_cuscod.Name = "col_iv_cuscod";
+            this.col_iv_cuscod.ReadOnly = true;
+            // 
+            // col_iv_warranty_spec
+            // 
+            this.col_iv_warranty_spec.DataPropertyName = "warranty_spec";
+            this.col_iv_warranty_spec.HeaderText = "War.";
+            this.col_iv_warranty_spec.MinimumWidth = 30;
+            this.col_iv_warranty_spec.Name = "col_iv_warranty_spec";
+            this.col_iv_warranty_spec.ReadOnly = true;
+            this.col_iv_warranty_spec.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.col_iv_warranty_spec.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.col_iv_warranty_spec.Width = 30;
+            // 
+            // col_iv_cusnam
+            // 
+            this.col_iv_cusnam.DataPropertyName = "cusnam";
+            this.col_iv_cusnam.HeaderText = "ชื่อลูกค้า";
+            this.col_iv_cusnam.Name = "col_iv_cusnam";
+            this.col_iv_cusnam.ReadOnly = true;
+            this.col_iv_cusnam.Visible = false;
+            // 
+            // col_seq
+            // 
+            this.col_seq.DataPropertyName = "seqnum";
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.col_seq.DefaultCellStyle = dataGridViewCellStyle17;
+            this.col_seq.HeaderText = "ลำดับ";
+            this.col_seq.MinimumWidth = 40;
+            this.col_seq.Name = "col_seq";
+            this.col_seq.ReadOnly = true;
+            this.col_seq.Width = 40;
+            // 
+            // col_stkcod
+            // 
+            this.col_stkcod.DataPropertyName = "stkcod";
+            this.col_stkcod.HeaderText = "รหัสสินค้า";
+            this.col_stkcod.MinimumWidth = 150;
+            this.col_stkcod.Name = "col_stkcod";
+            this.col_stkcod.ReadOnly = true;
+            this.col_stkcod.Width = 150;
+            // 
+            // col_stkdes
+            // 
+            this.col_stkdes.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.col_stkdes.DataPropertyName = "stkdes";
+            this.col_stkdes.HeaderText = "รายละเอียด";
+            this.col_stkdes.MinimumWidth = 140;
+            this.col_stkdes.Name = "col_stkdes";
+            this.col_stkdes.ReadOnly = true;
+            // 
+            // col_warranty_type
+            // 
+            this.col_warranty_type.DataPropertyName = "warranty_type";
+            this.col_warranty_type.HeaderText = "วิธีบันทึกอายุรับประกัน";
+            this.col_warranty_type.MinimumWidth = 140;
+            this.col_warranty_type.Name = "col_warranty_type";
+            this.col_warranty_type.ReadOnly = true;
+            this.col_warranty_type.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.col_warranty_type.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.col_warranty_type.Width = 140;
+            // 
+            // col_warranty_period
+            // 
+            this.col_warranty_period.DataPropertyName = "warranty_period";
+            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle18.Format = "N0";
+            dataGridViewCellStyle18.NullValue = null;
+            this.col_warranty_period.DefaultCellStyle = dataGridViewCellStyle18;
+            this.col_warranty_period.HeaderText = "อายุรับประกัน (เดือน)";
+            this.col_warranty_period.MinimumWidth = 130;
+            this.col_warranty_period.Name = "col_warranty_period";
+            this.col_warranty_period.ReadOnly = true;
+            this.col_warranty_period.Width = 130;
+            // 
+            // col_trnqty
+            // 
+            this.col_trnqty.DataPropertyName = "trnqty";
+            dataGridViewCellStyle19.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle19.Format = "N2";
+            dataGridViewCellStyle19.NullValue = null;
+            this.col_trnqty.DefaultCellStyle = dataGridViewCellStyle19;
+            this.col_trnqty.HeaderText = "";
+            this.col_trnqty.MinimumWidth = 100;
+            this.col_trnqty.Name = "col_trnqty";
+            this.col_trnqty.ReadOnly = true;
+            // 
+            // col_tqucod
+            // 
+            this.col_tqucod.DataPropertyName = "tqucod";
+            this.col_tqucod.HeaderText = "";
+            this.col_tqucod.MinimumWidth = 30;
+            this.col_tqucod.Name = "col_tqucod";
+            this.col_tqucod.ReadOnly = true;
+            this.col_tqucod.Width = 30;
+            // 
+            // col_stcrdmin
+            // 
+            this.col_stcrdmin.DataPropertyName = "stcrdmin";
+            this.col_stcrdmin.HeaderText = "StcrdMin";
+            this.col_stcrdmin.MinimumWidth = 100;
+            this.col_stcrdmin.Name = "col_stcrdmin";
+            this.col_stcrdmin.ReadOnly = true;
+            this.col_stcrdmin.Visible = false;
             // 
             // MainForm
             // 
@@ -671,7 +707,7 @@
             this.Name = "MainForm";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Num2Serial";
+            this.Text = "บันทึกอายุรับประกันสินค้า";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.statusStrip1.ResumeLayout(false);
@@ -721,15 +757,9 @@
         private System.Windows.Forms.Label lblTelnum;
         private System.Windows.Forms.DataGridView dgvSTCRD;
         private System.Windows.Forms.DataGridView dgvHS;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_stkcod;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_stkdes;
-        private System.Windows.Forms.DataGridViewButtonColumn col_warranty_type;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_warranty_period;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_trnqty;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_tqucod;
-        private System.Windows.Forms.DataGridViewTextBoxColumn col_stcrdmin;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox cbStatus;
+        private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn col_iv_docdat;
         private System.Windows.Forms.DataGridViewTextBoxColumn col_iv_docnum;
         private System.Windows.Forms.DataGridViewTextBoxColumn col_iv_cuscod;
@@ -740,7 +770,14 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn col_hs_cuscod;
         private System.Windows.Forms.DataGridViewButtonColumn col_hs_warranty_spec;
         private System.Windows.Forms.DataGridViewTextBoxColumn col_hs_cusnam;
-        private System.Windows.Forms.Label lblStatus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_seq;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_stkcod;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_stkdes;
+        private System.Windows.Forms.DataGridViewButtonColumn col_warranty_type;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_warranty_period;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_trnqty;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_tqucod;
+        private System.Windows.Forms.DataGridViewTextBoxColumn col_stcrdmin;
     }
 }
 

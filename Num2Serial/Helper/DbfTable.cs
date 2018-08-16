@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Num2Serial.Helper
+namespace Warranty.Helper
 {
     public static class DbfTable
     {
@@ -390,12 +390,13 @@ namespace Num2Serial.Helper
     public class StcrdMinVM
     {
         public StcrdMin stcrdmin { get; set; }
-        public string stkcod { get; set; }
-        public string stkdes { get; set; }
+        public string seqnum { get { return this.stcrdmin.seqnum; } }
+        public string stkcod { get { return this.stcrdmin.stkcod; } }
+        public string stkdes { get { return this.stcrdmin.stkdes; } }
         public string warranty_type { get; set; }
-        public int warranty_period { get; set; }
-        public double trnqty { get; set; }
-        public string tqucod { get; set; }
+        public int warranty_period { get { return this.stcrdmin.warranty_period; } }
+        public double trnqty { get { return this.stcrdmin.trnqty; } }
+        public string tqucod { get { return this.stcrdmin.tqucod; } }
     }
 
     public class Invoice

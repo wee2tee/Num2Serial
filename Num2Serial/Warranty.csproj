@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{DED9C9E0-331F-4560-9DCE-155BF06C7372}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Num2Serial</RootNamespace>
-    <AssemblyName>Num2Serial</AssemblyName>
+    <RootNamespace>Warranty</RootNamespace>
+    <AssemblyName>Warranty</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -16,13 +16,13 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\Express\ExpressI-v2\Num2Serial\</OutputPath>
+    <OutputPath>..\..\..\Express\ExpressI-v2\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -59,6 +59,12 @@
     <Compile Include="SubForm\DialogCompanySelect.Designer.cs">
       <DependentUpon>DialogCompanySelect.cs</DependentUpon>
     </Compile>
+    <Compile Include="SubForm\DialogInlineSearch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForm\DialogInlineSearch.Designer.cs">
+      <DependentUpon>DialogInlineSearch.cs</DependentUpon>
+    </Compile>
     <Compile Include="SubForm\DialogWarranty.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +86,9 @@
     </Compile>
     <EmbeddedResource Include="SubForm\DialogCompanySelect.resx">
       <DependentUpon>DialogCompanySelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForm\DialogInlineSearch.resx">
+      <DependentUpon>DialogInlineSearch.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SubForm\DialogWarranty.resx">
       <DependentUpon>DialogWarranty.cs</DependentUpon>

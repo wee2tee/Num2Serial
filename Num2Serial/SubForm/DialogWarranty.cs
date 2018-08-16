@@ -8,9 +8,9 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Num2Serial.Helper;
+using Warranty.Helper;
 
-namespace Num2Serial.SubForm
+namespace Warranty.SubForm
 {
     public partial class DialogWarranty : Form
     {
@@ -268,6 +268,24 @@ namespace Num2Serial.SubForm
             if(keyData == Keys.Escape)
             {
                 this.btnCancel.PerformClick();
+                return true;
+            }
+
+            if(keyData == Keys.F6)
+            {
+                if (this.cbWarType.Focused)
+                {
+                    this.cbWarType.DroppedDown = true;
+                    return true;
+                }
+            }
+
+            if(keyData == Keys.Enter)
+            {
+                if (this.btnOK.Focused || this.btnCancel.Focused)
+                    return false;
+
+                SendKeys.Send("{TAB}");
                 return true;
             }
 

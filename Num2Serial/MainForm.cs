@@ -10,10 +10,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Num2Serial.Helper;
-using Num2Serial.SubForm;
+using Warranty.Helper;
+using Warranty.SubForm;
 
-namespace Num2Serial
+namespace Warranty
 {
     public partial class MainForm : Form
     {
@@ -37,7 +37,7 @@ namespace Num2Serial
                 }
                 else
                 {
-                    this.data_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName + @"\" + data_path;
+                    this.data_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)/*.Parent*/.FullName + @"\" + data_path;
                 }
             }
 
@@ -55,8 +55,8 @@ namespace Num2Serial
             this.dgvIV.DataSource = this.iv_list;
             this.hs_list = new BindingList<ArtrnMin>();
 
-            this.secure_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName + @"\secure";
-            this.express_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName;
+            this.secure_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)/*.Parent*/.FullName + @"\secure";
+            this.express_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)/*.Parent*/.FullName;
 
             if (!this.TestSecurePath())
             {
@@ -65,7 +65,7 @@ namespace Num2Serial
                 return;
             }
 
-            this.ResetFormState(FORM_MODE.READ);
+            this.form_mode = FORM_MODE.READ;
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
@@ -83,7 +83,7 @@ namespace Num2Serial
 
                     this.iv_list =  new BindingList<ArtrnMin>(DbfTable.InvoiceList(this.data_path, this.status, DbfTable.INVOICE_TYPE.IV));
                     this.dgvIV.DataSource = this.iv_list;
-                    this.tabIV.Text = "  ขายเชื่อ (" + this.iv_list.Count.ToString() + ")  ";
+                    this.tabIV.Text = "  ขายเชื่อ (" + this.iv_list.Count.ToString() + ") <F6>  ";
                 }
                 else
                 {
@@ -99,17 +99,9 @@ namespace Num2Serial
             this.cbStatus.Items.Add(new ComboboxItem { Text = TransactionStatus.Warranted, Value = TransactionStatus.STATUS.WARRANTED });
         }
 
-        private void ResetFormState(FORM_MODE form_mode)
-        {
-            this.form_mode = form_mode;
-
-            this.dgvIV.SetControlState(new FORM_MODE[] { FORM_MODE.READ }, form_mode);
-            this.dgvHS.SetControlState(new FORM_MODE[] { FORM_MODE.READ }, form_mode);
-        }
 
         private bool TestSecurePath()
         {
-            //if (File.Exists(this.secure_path + "sccomp.dbf"))
             if (Directory.Exists(this.secure_path))
             {
                 return true;
@@ -212,14 +204,33 @@ namespace Num2Serial
 
         private void dgvIV_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
         {
-            if(e.RowIndex == -1)
+            if (e.RowIndex == -1)
             {
-                if(((DataGridView)sender).Columns[e.ColumnIndex].Name == this.col_iv_warranty_spec.Name || ((DataGridView)sender).Columns[e.ColumnIndex].Name == this.col_hs_warranty_spec.Name)
+                if (this.form_mode == FORM_MODE.READ)
                 {
-                    e.CellStyle.Font = new Font("Tahoma", 7f, FontStyle.Regular);
+                    if (((DataGridView)sender).Columns[e.ColumnIndex].Name == this.col_iv_warranty_spec.Name || ((DataGridView)sender).Columns[e.ColumnIndex].Name == this.col_hs_warranty_spec.Name)
+                    {
+                        e.CellStyle.Font = new Font("Tahoma", 7f, FontStyle.Regular);
+                    }
+                    e.CellStyle.BackColor = Color.Pink;
+                    e.CellStyle.SelectionBackColor = Color.Pink;
+
                     e.Paint(e.CellBounds, DataGridViewPaintParts.All);
                     e.Handled = true;
                 }
+                else
+                {
+                    if (((DataGridView)sender).Columns[e.ColumnIndex].Name == this.col_iv_warranty_spec.Name || ((DataGridView)sender).Columns[e.ColumnIndex].Name == this.col_hs_warranty_spec.Name)
+                    {
+                        e.CellStyle.Font = new Font("Tahoma", 7f, FontStyle.Regular);
+                    }
+                    e.CellStyle.BackColor = ((DataGridView)sender).ColumnHeadersDefaultCellStyle.BackColor;
+                    e.CellStyle.SelectionBackColor = ((DataGridView)sender).ColumnHeadersDefaultCellStyle.SelectionBackColor;
+
+                    e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+                    e.Handled = true;
+                }
+
             }
             else
             {
@@ -231,7 +242,7 @@ namespace Num2Serial
                     {
                         e.Paint(e.CellBounds, DataGridViewPaintParts.Background | DataGridViewPaintParts.Border | DataGridViewPaintParts.ContentBackground);
                         Rectangle rect = new Rectangle(e.CellBounds.X + 5, e.CellBounds.Y + 5, 16, 16);
-                        e.Graphics.DrawImage((Image)Num2Serial.Properties.Resources.stamp, rect);
+                        e.Graphics.DrawImage((Image)Warranty.Properties.Resources.stamp, rect);
                         e.Handled = true;
                     }
                     else
@@ -264,25 +275,7 @@ namespace Num2Serial
 
             if(((DataGridView)sender).Columns[e.ColumnIndex].Name == this.col_warranty_type.Name)
             {
-                var st = (StcrdMin)((DataGridView)sender).Rows[e.RowIndex].Cells[this.col_stcrdmin.Name].Value;
-
-                DialogWarranty war = new DialogWarranty(this, st);
-                if(war.ShowDialog() == DialogResult.OK)
-                {
-                    if (this.tabControl2.SelectedTab == this.tabIV)
-                    {
-                        this.curr_invoice = DbfTable.InVoice(this.data_path, this.curr_invoice.artrn.docnum.Trim());
-                    }
-                    else
-                    {
-                        this.curr_invoice = DbfTable.InVoice(this.data_path, this.curr_invoice.artrn.docnum.Trim());
-                    }
-
-                    this.FillForm(this.curr_invoice);
-
-                    if (this.dgvSTCRD.Rows.Count > 0)
-                        this.dgvSTCRD.Rows.Cast<DataGridViewRow>().Where(r => ((StcrdMin)r.Cells[this.col_stcrdmin.Name].Value).seqnum == st.seqnum).First().Cells[this.col_stkcod.Name].Selected = true;
-                }
+                this.ShowWarrantyForm();
             }
         }
 
@@ -292,13 +285,13 @@ namespace Num2Serial
             {
                 this.iv_list = new BindingList<ArtrnMin>(DbfTable.InvoiceList(this.data_path, this.status, DbfTable.INVOICE_TYPE.IV));
                 this.dgvIV.DataSource = this.iv_list;
-                this.tabIV.Text = "  ขายเชื่อ (" + this.iv_list.Count.ToString() + ")  ";
+                this.tabIV.Text = "  ขายเชื่อ (" + this.iv_list.Count.ToString() + ") <F6>  ";
             }
             else
             {
                 this.hs_list = new BindingList<ArtrnMin>(DbfTable.InvoiceList(this.data_path, this.status, DbfTable.INVOICE_TYPE.HS));
                 this.dgvHS.DataSource = this.hs_list;
-                this.tabHS.Text = "  ขายสด (" + this.hs_list.Count.ToString() + ")  ";
+                this.tabHS.Text = "  ขายสด (" + this.hs_list.Count.ToString() + ") <F7>  ";
             }
         }
 
@@ -372,8 +365,6 @@ namespace Num2Serial
                 var warranted = (string)((DataGridView)sender).Rows[e.RowIndex].Cells[e.ColumnIndex].Value;
                 if(warranted != "Y")
                 {
-                    //MessageBox.Show(this.curr_invoice.artrn.docnum);
-
                     if (MessageBox.Show("ทำเครื่องหมายว่า " + this.curr_invoice.artrn.docnum + " ได้บันทึกอายุรับประกันแล้ว, ทำต่อหรือไม่?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
                     {
                         try
@@ -384,7 +375,7 @@ namespace Num2Serial
                                 using (OleDbCommand cmd = conn.CreateCommand())
                                 {
 
-                                    cmd.CommandText = "Update artrn Set num2=1.99 Where TRIM(docnum)='" + this.curr_invoice.artrn.docnum.Trim() + "'";
+                                    cmd.CommandText = "Update artrn Set num2=1 Where TRIM(docnum)='" + this.curr_invoice.artrn.docnum.Trim() + "'";
                                     int affected = cmd.ExecuteNonQuery();
                                     if(affected > 0)
                                     {
@@ -398,6 +389,277 @@ namespace Num2Serial
                         {
                             MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
+                    }
+                }
+            }
+        }
+
+        private void dgvSTCRD_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            if(e.RowIndex == -1)
+            {
+
+                if(this.form_mode == FORM_MODE.READ_ITEM)
+                {
+                    e.CellStyle.BackColor = Color.Pink;
+                    e.CellStyle.SelectionBackColor = Color.Pink;
+                    e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+                    if (((DataGridView)sender).Columns[e.ColumnIndex].Name == this.col_tqucod.Name)
+                    {
+                        Rectangle rect_1 = ((DataGridView)sender).GetCellDisplayRectangle(((DataGridView)sender).Columns[this.col_trnqty.Name].Index, -1, true);
+                        Rectangle rect_2 = ((DataGridView)sender).GetCellDisplayRectangle(((DataGridView)sender).Columns[this.col_tqucod.Name].Index, -1, true);
+                        using (SolidBrush b = new SolidBrush(Color.Pink))
+                        {
+                            RectangleF rect = new RectangleF(rect_1.X + 1, rect_1.Y + 2, rect_1.Width + rect_2.Width - 2, rect_1.Height - 2);
+                            e.Graphics.FillRectangle(b, rect);
+                            using (SolidBrush bfnt = new SolidBrush(((DataGridView)sender).ColumnHeadersDefaultCellStyle.ForeColor))
+                            {
+                                e.Graphics.DrawString("จำนวน", ((DataGridView)sender).ColumnHeadersDefaultCellStyle.Font, bfnt, rect_1, new StringFormat { Alignment = StringAlignment.Far, LineAlignment = StringAlignment.Center });
+                            }
+                        }
+                    }
+                    e.Handled = true;
+                }
+                else
+                {
+                    e.CellStyle.BackColor = ((DataGridView)sender).ColumnHeadersDefaultCellStyle.BackColor;
+                    e.CellStyle.SelectionBackColor = ((DataGridView)sender).ColumnHeadersDefaultCellStyle.SelectionBackColor;
+                    e.Paint(e.CellBounds, DataGridViewPaintParts.All);
+                    if (((DataGridView)sender).Columns[e.ColumnIndex].Name == this.col_tqucod.Name)
+                    {
+                        Rectangle rect_1 = ((DataGridView)sender).GetCellDisplayRectangle(((DataGridView)sender).Columns[this.col_trnqty.Name].Index, -1, true);
+                        Rectangle rect_2 = ((DataGridView)sender).GetCellDisplayRectangle(((DataGridView)sender).Columns[this.col_tqucod.Name].Index, -1, true);
+                        using (SolidBrush b = new SolidBrush(((DataGridView)sender).ColumnHeadersDefaultCellStyle.BackColor))
+                        {
+                            RectangleF rect = new RectangleF(rect_1.X + 1, rect_1.Y + 2, rect_1.Width + rect_2.Width - 2, rect_1.Height - 2);
+                            e.Graphics.FillRectangle(b, rect);
+                            using (SolidBrush bfnt = new SolidBrush(((DataGridView)sender).ColumnHeadersDefaultCellStyle.ForeColor))
+                            {
+                                e.Graphics.DrawString("จำนวน", ((DataGridView)sender).ColumnHeadersDefaultCellStyle.Font, bfnt, rect_1, new StringFormat { Alignment = StringAlignment.Far, LineAlignment = StringAlignment.Center });
+                            }
+                        }
+                    }
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void dgvIV_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.RowIndex == -1)
+                return;
+
+            if(((DataGridView)sender).Columns[e.ColumnIndex].Name == this.col_iv_warranty_spec.Name || ((DataGridView)sender).Columns[e.ColumnIndex].Name == this.col_hs_warranty_spec.Name)
+            {
+                bool warranted = false;
+                if (this.tabControl2.SelectedTab == this.tabIV)
+                {
+                    warranted = (string)((DataGridView)sender).Rows[e.RowIndex].Cells[this.col_iv_warranty_spec.Name].Value == "Y" ? true : false;
+                }
+                else
+                {
+                    warranted = (string)((DataGridView)sender).Rows[e.RowIndex].Cells[this.col_hs_warranty_spec.Name].Value == "Y" ? true : false;
+                }
+
+                if (!warranted)
+                {
+                    ((DataGridView)sender).Rows[e.RowIndex].Cells[e.ColumnIndex].ToolTipText = "ทำเครื่องหมายว่าบันทึกอายุรับประกันแล้ว";
+                }
+            }
+        }
+
+        private void dgvSTCRD_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (e.RowIndex == -1)
+                return;
+
+            if(((DataGridView)sender).Columns[e.ColumnIndex].Name == this.col_warranty_type.Name)
+            {
+                ((DataGridView)sender).Rows[e.RowIndex].Cells[e.ColumnIndex].ToolTipText = "แก้ไขอายุรับประกันของสินค้านี้ <Alt + E>";
+            }
+        }
+
+        private void dgvSTCRD_Enter(object sender, EventArgs e)
+        {
+            this.form_mode = FORM_MODE.READ_ITEM;
+
+            this.dgvHS.Refresh();
+            this.dgvIV.Refresh();
+            this.dgvSTCRD.Refresh();
+        }
+
+        private void dgvIV_Enter(object sender, EventArgs e)
+        {
+            this.form_mode = FORM_MODE.READ;
+
+            this.dgvHS.Refresh();
+            this.dgvIV.Refresh();
+            this.dgvSTCRD.Refresh();
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.F6)
+            {
+                this.form_mode = FORM_MODE.READ;
+                this.tabControl2.SelectedTab = this.tabIV;
+                this.dgvIV.Refresh();
+                this.dgvSTCRD.Refresh();
+                this.dgvIV.Focus();
+            }
+
+            if (keyData == Keys.F7)
+            {
+                this.form_mode = FORM_MODE.READ;
+                this.tabControl2.SelectedTab = this.tabHS;
+                this.dgvHS.Refresh();
+                this.dgvSTCRD.Refresh();
+                this.dgvHS.Focus();
+            }
+
+            if (keyData == Keys.F8)
+            {
+                this.form_mode = FORM_MODE.READ_ITEM;
+                this.dgvSTCRD.Refresh();
+                this.dgvIV.Refresh();
+                this.dgvHS.Refresh();
+                this.dgvSTCRD.Focus();
+            }
+
+            if (keyData == (Keys.Alt | Keys.E))
+            {
+                if(this.form_mode == FORM_MODE.READ_ITEM)
+                {
+                    if(this.dgvSTCRD.Rows.Count > 0)
+                    {
+                        this.ShowWarrantyForm();
+                        return true;
+                    }
+                }
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void dgvSTCRD_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex == -1)
+                return;
+
+            this.ShowWarrantyForm();
+        }
+
+        private void dgvSTCRD_MouseClick(object sender, MouseEventArgs e)
+        {
+            if(e.Button == MouseButtons.Right)
+            {
+                int row_index = ((DataGridView)sender).HitTest(e.X, e.Y).RowIndex;
+                if (row_index > -1)
+                {
+                    ((DataGridView)sender).Rows[row_index].Cells[this.col_stkcod.Name].Selected = true;
+
+                    ContextMenu cm = new ContextMenu();
+                    MenuItem mnu_edit = new MenuItem("แก้ไขอายุรับประกันของสินค้านี้ <Alt + E>");
+                    mnu_edit.Click += delegate
+                    {
+                        this.ShowWarrantyForm();
+                    };
+                    cm.MenuItems.Add(mnu_edit);
+
+                    cm.Show((DataGridView)sender, new Point(e.X, e.Y));
+                }
+            }
+        }
+
+        private void ShowWarrantyForm()
+        {
+            var st = (StcrdMin)this.dgvSTCRD.Rows[this.dgvSTCRD.CurrentCell.RowIndex].Cells[this.col_stcrdmin.Name].Value;
+
+            DialogWarranty war = new DialogWarranty(this, st);
+            if (war.ShowDialog() == DialogResult.OK)
+            {
+                if (this.tabControl2.SelectedTab == this.tabIV)
+                {
+                    this.curr_invoice = DbfTable.InVoice(this.data_path, this.curr_invoice.artrn.docnum.Trim());
+                }
+                else
+                {
+                    this.curr_invoice = DbfTable.InVoice(this.data_path, this.curr_invoice.artrn.docnum.Trim());
+                }
+
+                this.FillForm(this.curr_invoice);
+
+                if (this.dgvSTCRD.Rows.Count > 0)
+                    this.dgvSTCRD.Rows.Cast<DataGridViewRow>().Where(r => ((StcrdMin)r.Cells[this.col_stcrdmin.Name].Value).seqnum == st.seqnum).First().Cells[this.col_stkcod.Name].Selected = true;
+            }
+        }
+
+        private void dgvIV_MouseClick(object sender, MouseEventArgs e)
+        {
+            if(e.Button == MouseButtons.Right)
+            {
+                int row_index = ((DataGridView)sender).HitTest(e.X, e.Y).RowIndex;
+
+                if(row_index > -1)
+                {
+                    if (this.tabControl2.SelectedTab == this.tabIV)
+                        ((DataGridView)sender).Rows[row_index].Cells[this.col_iv_docnum.Name].Selected = true;
+
+                    if(this.tabControl2.SelectedTab == this.tabHS)
+                        ((DataGridView)sender).Rows[row_index].Cells[this.col_hs_docnum.Name].Selected = true;
+
+                    ContextMenu cm = new ContextMenu();
+                    MenuItem mnu_appr = new MenuItem("ทำเครื่องหมายว่าบันทึกอายุรับประกันแล้ว");
+                    mnu_appr.Click += delegate
+                    {
+                        this.ShowApproveWarrantyForm();
+                    };
+                    cm.MenuItems.Add(mnu_appr);
+
+                    cm.Show((DataGridView)sender, new Point(e.X, e.Y));
+                }
+            }
+        }
+
+        private void ShowApproveWarrantyForm()
+        {
+            string warranted = string.Empty;
+
+            if(this.tabControl2.SelectedTab == this.tabIV)
+            {
+                warranted = (string)this.dgvIV.Rows[this.dgvIV.CurrentCell.RowIndex].Cells[this.col_iv_warranty_spec.Name].Value;
+            }
+            else
+            {
+                warranted = (string)this.dgvHS.Rows[this.dgvHS.CurrentCell.RowIndex].Cells[this.col_hs_warranty_spec.Name].Value;
+            }
+
+            
+            if (warranted != "Y")
+            {
+                if (MessageBox.Show("ทำเครื่องหมายว่า " + this.curr_invoice.artrn.docnum + " ได้บันทึกอายุรับประกันแล้ว, ทำต่อหรือไม่?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+                {
+                    try
+                    {
+                        using (OleDbConnection conn = new OleDbConnection(@"Provider=VFPOLEDB.1;Data Source=" + this.data_path))
+                        {
+                            conn.Open();
+                            using (OleDbCommand cmd = conn.CreateCommand())
+                            {
+
+                                cmd.CommandText = "Update artrn Set num2=1 Where TRIM(docnum)='" + this.curr_invoice.artrn.docnum.Trim() + "'";
+                                int affected = cmd.ExecuteNonQuery();
+                                if (affected > 0)
+                                {
+                                    this.tabControl2_SelectedIndexChanged(this.tabControl2, new EventArgs());
+                                }
+                            }
+                            conn.Close();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }

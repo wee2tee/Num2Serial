@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Num2Serial.Helper
+namespace Warranty.Helper
 {
     public static class Helper
     {
@@ -48,7 +48,7 @@ namespace Num2Serial.Helper
                 int start_ndx = selected_comp.path.IndexOf("(");
                 int length = selected_comp.path.Length - start_ndx;
                 string non_bracket = selected_comp.path.Substring(start_ndx, length).Trim().TrimStart('(').TrimEnd(')');
-                path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName + @"\" + non_bracket + @"\";
+                path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)/*.Parent*/.FullName + @"\" + non_bracket + @"\";
             }
             else
             {
@@ -58,7 +58,7 @@ namespace Num2Serial.Helper
                 }
                 else
                 {
-                    path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName + @"\" + selected_comp.path.Trim() + @"\";
+                    path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)/*.Parent*/.FullName + @"\" + selected_comp.path.Trim() + @"\";
                 }
             }
 
@@ -103,11 +103,6 @@ namespace Num2Serial.Helper
             return new StcrdMinVM
             {
                 stcrdmin = s,
-                stkcod = s.stkcod,
-                stkdes = s.stkdes,
-                tqucod = s.tqucod,
-                trnqty = s.trnqty,
-                warranty_period = s.warranty_period,
                 warranty_type = s.warranty_type == WarrantyType.TYPE.DEFAULT ? WarrantyType.Default : WarrantyType.Specify
             };
         }

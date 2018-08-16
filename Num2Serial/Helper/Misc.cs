@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 
-namespace Num2Serial.Helper
+namespace Warranty.Helper
 {
     public class Misc
     {
@@ -55,6 +55,7 @@ namespace Num2Serial.Helper
     public enum FORM_MODE
     {
         READ,
+        READ_ITEM,
         EDIT
     }
 

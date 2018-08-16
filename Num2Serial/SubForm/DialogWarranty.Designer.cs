@@ -1,4 +1,4 @@
-﻿namespace Num2Serial.SubForm
+﻿namespace Warranty.SubForm
 {
     partial class DialogWarranty
     {
@@ -44,7 +44,7 @@
             this.cbWarType.Location = new System.Drawing.Point(179, 30);
             this.cbWarType.Name = "cbWarType";
             this.cbWarType.Size = new System.Drawing.Size(137, 24);
-            this.cbWarType.TabIndex = 1;
+            this.cbWarType.TabIndex = 0;
             this.cbWarType.SelectedIndexChanged += new System.EventHandler(this.cbWarType_SelectedIndexChanged);
             // 
             // numWarMonth
@@ -57,7 +57,7 @@
             0});
             this.numWarMonth.Name = "numWarMonth";
             this.numWarMonth.Size = new System.Drawing.Size(136, 23);
-            this.numWarMonth.TabIndex = 2;
+            this.numWarMonth.TabIndex = 1;
             this.numWarMonth.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numWarMonth.ValueChanged += new System.EventHandler(this.numWarMonth_ValueChanged);
             // 
@@ -85,7 +85,7 @@
             this.btnOK.Location = new System.Drawing.Point(80, 114);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(102, 33);
-            this.btnOK.TabIndex = 3;
+            this.btnOK.TabIndex = 2;
             this.btnOK.Text = "ตกลง <F9>";
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
@@ -97,7 +97,7 @@
             this.btnCancel.Location = new System.Drawing.Point(188, 114);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(102, 33);
-            this.btnCancel.TabIndex = 4;
+            this.btnCancel.TabIndex = 3;
             this.btnCancel.Text = "ยกเลิก <Esc>";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
