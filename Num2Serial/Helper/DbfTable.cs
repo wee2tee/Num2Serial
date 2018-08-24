@@ -53,6 +53,39 @@ namespace Warranty.Helper
             return sccomp;
         }
 
+        public static Isinfo GetIsinfo(string data_path)
+        {
+            if (!File.Exists(data_path + "isinfo.dbf"))
+                throw new Exception("ค้นหาไฟล์ isinfo.dbf ไม่พบ");
+
+            DataTable dt = new DataTable();
+
+            using (OleDbConnection conn = new OleDbConnection(@"Provider=VFPOLEDB.1;Data Source=" + data_path))
+            {
+                using (OleDbCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = "Select thinam from isinfo";
+
+                    using (OleDbDataAdapter da = new OleDbDataAdapter(cmd))
+                    {
+                        da.Fill(dt);
+                        
+                        if(dt.Rows.Count > 0)
+                        {
+                            return new Isinfo
+                            {
+                                thinam = !dt.Rows[0].IsNull("thinam") ? dt.Rows[0]["thinam"].ToString().Trim() : string.Empty
+                            };
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+            }
+        }
+
         public static List<ArtrnMin> InvoiceList(string data_path, TransactionStatus.STATUS status = TransactionStatus.STATUS.WARRANTY, INVOICE_TYPE invoice_type = INVOICE_TYPE.IV)
         {
             if (!File.Exists(data_path + "artrn.dbf"))
@@ -274,7 +307,7 @@ namespace Warranty.Helper
                 }
 
                 cmd = conn.CreateCommand();
-                cmd.CommandText = "Select stcrd.tqucod, stcrd.disc, stcrd.docnum, stcrd.seqnum, stcrd.stkcod, stcrd.stkdes, stcrd.loccod, stcrd.trnqty, stcrd.trnval, stcrd.unitpr, stmas.warmonth, isacc.method, x.rem_remark as rem_remark From stcrd ";
+                cmd.CommandText = "Select stcrd.tqucod, stcrd.disc, stcrd.docnum, stcrd.docdat, stcrd.seqnum, stcrd.stkcod, stcrd.stkdes, stcrd.loccod, stcrd.trnqty, stcrd.trnval, stcrd.unitpr, stmas.warmonth, isacc.method, x.rem_remark as rem_remark From stcrd ";
                 cmd.CommandText += "Left Join stmas On stcrd.stkcod=stmas.stkcod ";
                 cmd.CommandText += "Left Join isacc On stmas.acccod=isacc.acccod ";
                 cmd.CommandText += "Left Join (Select artrnrm.docnum as rem_docnum, artrnrm.seqnum as rem_seqnum, artrnrm.remark as rem_remark From artrnrm Where artrnrm.docnum='" + docnum + "' AND SUBSTR(artrnrm.seqnum,1,1)!='@' AND LOWER(artrnrm.remark) LIKE 'warranty.%') AS x On x.rem_docnum=stcrd.docnum AND SUBSTR(x.rem_seqnum,1,3)=stcrd.seqnum ";
@@ -290,6 +323,7 @@ namespace Warranty.Helper
                         var st = new StcrdMin
                         {
                             disc = !dt.Rows[i].IsNull("disc") ? dt.Rows[i]["disc"].ToString() : string.Empty,
+                            docdat = !dt.Rows[i].IsNull("docdat") ? (DateTime?)dt.Rows[i]["docdat"] : null,
                             docnum = !dt.Rows[i].IsNull("docnum") ? dt.Rows[i]["docnum"].ToString().Trim() : string.Empty,
                             cost_method = !dt.Rows[i].IsNull("method") ? dt.Rows[i]["method"].ToString() : string.Empty,
                             loccod = !dt.Rows[i].IsNull("loccod") ? dt.Rows[i]["loccod"].ToString().Trim() : string.Empty,
@@ -302,7 +336,8 @@ namespace Warranty.Helper
                             unitpr = !dt.Rows[i].IsNull("unitpr") ? (double)dt.Rows[i]["unitpr"] : 0,
                             warranty_default = !dt.Rows[i].IsNull("warmonth") ? (dt.Rows[i]["warmonth"].ToString().Trim().Length > 0 ? Convert.ToInt32(dt.Rows[i]["warmonth"].ToString().Trim()) : 0) : 0,
                             warranty_remark = !dt.Rows[i].IsNull("rem_remark") && dt.Rows[i]["rem_remark"].ToString().ToLower().StartsWith("warranty.") ? dt.Rows[i]["rem_remark"].ToString().ToLower().TrimStart(("warranty.").ToCharArray()).Trim() : string.Empty,
-                            warranty_period = 0
+                            warranty_period = 0,
+                            
                         };
 
                         int period = 0;
@@ -324,6 +359,12 @@ namespace Warranty.Helper
     }
 
     #region Dbf Model
+
+    public class Isinfo
+    {
+        public string thinam { get; set; }
+
+    }
 
     public class Sccomp
     {
@@ -369,6 +410,7 @@ namespace Warranty.Helper
 
     public class StcrdMin
     {
+        public DateTime? docdat { get; set; }
         public string docnum { get; set; }
         public string seqnum { get; set; }
         public string stkcod { get; set; }
@@ -430,6 +472,17 @@ namespace Warranty.Helper
         public string docnum { get; set; }
         public string seqnum { get; set; }
         public string remark { get; set; }
+    }
+
+    public class Islog
+    {
+        public int id { get; set; }
+        public DateTime? rec_time { get; set; }
+        public string data_path { get; set; }
+        public string docnum { get; set; }
+        public string seqnum { get; set; }
+        public string desc { get; set; }
+
     }
 
     public class Artrn

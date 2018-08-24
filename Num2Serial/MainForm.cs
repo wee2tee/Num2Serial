@@ -25,6 +25,7 @@ namespace Warranty
         private BindingList<ArtrnMin> hs_list;
         private TransactionStatus.STATUS status;
         private FORM_MODE form_mode;
+        public Log log = new Log();
 
         public MainForm(string data_path = null)
         {
@@ -33,11 +34,18 @@ namespace Warranty
             {
                 if (data_path.Contains(@"\"))
                 {
-                    this.data_path = data_path;
+                    this.data_path = data_path.TrimEnd('\\') + @"\";
                 }
                 else
                 {
-                    this.data_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)/*.Parent*/.FullName + @"\" + data_path;
+                    //this.data_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)/*.Parent*/.FullName + @"\" + data_path;
+                    this.data_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName + @"\" + data_path + @"\";
+                }
+
+                if (!Directory.Exists(this.data_path))
+                {
+                    MessageBox.Show("ที่เก็บข้อมูล " + this.data_path + " ไม่มีข้อมูลอยู่", "", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                    this.data_path = null;
                 }
             }
 
@@ -55,8 +63,10 @@ namespace Warranty
             this.dgvIV.DataSource = this.iv_list;
             this.hs_list = new BindingList<ArtrnMin>();
 
-            this.secure_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)/*.Parent*/.FullName + @"\secure";
-            this.express_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)/*.Parent*/.FullName;
+            //this.secure_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)/*.Parent*/.FullName + @"\secure";
+            //this.express_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)/*.Parent*/.FullName;
+            this.secure_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName + @"\secure";
+            this.express_path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName;
 
             if (!this.TestSecurePath())
             {
@@ -76,7 +86,7 @@ namespace Warranty
                 if(comp.ShowDialog() == DialogResult.OK)
                 {
                     this.data_path = comp.selected_comp.RewriteDataPath();
-                    this.lblDataPath.Text = this.data_path.TrimEnd('\\') + "   [" + comp.selected_comp.compnam + "]";
+                    this.lblDataPath.Text = DbfTable.GetIsinfo(this.data_path).thinam + " ( " + this.data_path.TrimEnd('\\') + " )";
 
                     this.LoadStatusComboboxItem();
                     this.cbStatus.SelectedItem = this.cbStatus.Items.Cast<ComboboxItem>().Where(i => ((TransactionStatus.STATUS)i.Value) == TransactionStatus.STATUS.WARRANTY).First();
@@ -89,6 +99,17 @@ namespace Warranty
                 {
                     Application.Exit();
                 }
+            }
+            else
+            {
+                this.lblDataPath.Text = DbfTable.GetIsinfo(this.data_path).thinam + " ( " + this.data_path.TrimEnd('\\') + " )";
+
+                this.LoadStatusComboboxItem();
+                this.cbStatus.SelectedItem = this.cbStatus.Items.Cast<ComboboxItem>().Where(i => ((TransactionStatus.STATUS)i.Value) == TransactionStatus.STATUS.WARRANTY).First();
+
+                this.iv_list = new BindingList<ArtrnMin>(DbfTable.InvoiceList(this.data_path, this.status, DbfTable.INVOICE_TYPE.IV));
+                this.dgvIV.DataSource = this.iv_list;
+                this.tabIV.Text = "  ขายเชื่อ (" + this.iv_list.Count.ToString() + ") <F6>  ";
             }
         }
 
@@ -384,6 +405,8 @@ namespace Warranty
                                 }
                                 conn.Close();
                             }
+
+                            log.KeepLog(new LogDetail { data_path = this.data_path, docnum = this.curr_invoice.artrn.docnum.Trim(), seqnum = string.Empty, desc = "ทำเครื่องหมายว่าบันทึกอายุรับประกันแล้ว" });
                         }
                         catch (Exception ex)
                         {
@@ -398,7 +421,6 @@ namespace Warranty
         {
             if(e.RowIndex == -1)
             {
-
                 if(this.form_mode == FORM_MODE.READ_ITEM)
                 {
                     e.CellStyle.BackColor = Color.Pink;
@@ -538,6 +560,15 @@ namespace Warranty
                 }
             }
 
+            if(keyData == Keys.Enter)
+            {
+                if (this.txtSearchDocnum.Focused)
+                {
+                    this.btnSearch.PerformClick();
+                    return true;
+                }
+            }
+
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
@@ -634,7 +665,6 @@ namespace Warranty
                 warranted = (string)this.dgvHS.Rows[this.dgvHS.CurrentCell.RowIndex].Cells[this.col_hs_warranty_spec.Name].Value;
             }
 
-            
             if (warranted != "Y")
             {
                 if (MessageBox.Show("ทำเครื่องหมายว่า " + this.curr_invoice.artrn.docnum + " ได้บันทึกอายุรับประกันแล้ว, ทำต่อหรือไม่?", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
@@ -663,6 +693,42 @@ namespace Warranty
                     }
                 }
             }
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            if (this.txtSearchDocnum.Text.Trim().Length == 0)
+                return;
+
+            List<ArtrnMin> iv_list = DbfTable.InvoiceList(this.data_path, TransactionStatus.STATUS.ALL, DbfTable.INVOICE_TYPE.IV);
+            List<ArtrnMin> hs_list = DbfTable.InvoiceList(this.data_path, TransactionStatus.STATUS.ALL, DbfTable.INVOICE_TYPE.HS);
+
+            ArtrnMin target_invoice = null;
+            if(iv_list.Where(i => i.docnum.Trim() == this.txtSearchDocnum.Text.Trim()).FirstOrDefault() != null)
+            {
+                target_invoice = iv_list.Where(i => i.docnum.Trim() == this.txtSearchDocnum.Text.Trim()).First();
+                this.tabControl2.SelectedTab = this.tabIV;
+                this.cbStatus.SelectedItem = this.cbStatus.Items.Cast<ComboboxItem>().Where(c => (TransactionStatus.STATUS)c.Value == TransactionStatus.STATUS.ALL).First();
+                this.dgvIV.Rows.Cast<DataGridViewRow>().Where(r => ((string)r.Cells[this.col_iv_docnum.Name].Value).Trim() == this.txtSearchDocnum.Text.Trim()).First().Cells[this.col_iv_docnum.Name].Selected = true;
+            }
+            else if(hs_list.Where(i => i.docnum.Trim() == this.txtSearchDocnum.Text.Trim()).FirstOrDefault() != null)
+            {
+                target_invoice = hs_list.Where(i => i.docnum.Trim() == this.txtSearchDocnum.Text.Trim()).First();
+                this.tabControl2.SelectedTab = this.tabHS;
+                this.cbStatus.SelectedItem = this.cbStatus.Items.Cast<ComboboxItem>().Where(c => (TransactionStatus.STATUS)c.Value == TransactionStatus.STATUS.ALL).First();
+                this.dgvHS.Rows.Cast<DataGridViewRow>().Where(r => ((string)r.Cells[this.col_hs_docnum.Name].Value).Trim() == this.txtSearchDocnum.Text.Trim()).First().Cells[this.col_hs_docnum.Name].Selected = true;
+            }
+            else
+            {
+                MessageBox.Show("ค้นหาบิลขายเลขที่ " + this.txtSearchDocnum.Text.Trim() + " ไม่พบ");
+                return;
+            }
+        }
+
+        private void btnLog_ButtonClick(object sender, EventArgs e)
+        {
+            DialogIslog log = new DialogIslog(this);
+            log.ShowDialog();
         }
     }
 }

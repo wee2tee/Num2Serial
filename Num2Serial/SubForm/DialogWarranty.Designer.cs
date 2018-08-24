@@ -60,6 +60,7 @@
             this.numWarMonth.TabIndex = 1;
             this.numWarMonth.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.numWarMonth.ValueChanged += new System.EventHandler(this.numWarMonth_ValueChanged);
+            this.numWarMonth.KeyUp += new System.Windows.Forms.KeyEventHandler(this.numWarMonth_KeyUp);
             // 
             // label1
             // 

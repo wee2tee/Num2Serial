@@ -48,7 +48,9 @@ namespace Warranty.Helper
                 int start_ndx = selected_comp.path.IndexOf("(");
                 int length = selected_comp.path.Length - start_ndx;
                 string non_bracket = selected_comp.path.Substring(start_ndx, length).Trim().TrimStart('(').TrimEnd(')');
-                path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)/*.Parent*/.FullName + @"\" + non_bracket + @"\";
+                
+                //path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)/*.Parent*/.FullName + @"\" + non_bracket + @"\";
+                path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName + @"\" + non_bracket + @"\";
             }
             else
             {
@@ -58,7 +60,8 @@ namespace Warranty.Helper
                 }
                 else
                 {
-                    path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)/*.Parent*/.FullName + @"\" + selected_comp.path.Trim() + @"\";
+                    //path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)/*.Parent*/.FullName + @"\" + selected_comp.path.Trim() + @"\";
+                    path = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory).Parent.FullName + @"\" + selected_comp.path.Trim() + @"\";
                 }
             }
 
