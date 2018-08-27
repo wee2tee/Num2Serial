@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgv = new System.Windows.Forms.DataGridView();
@@ -37,6 +38,9 @@
             this.col_docnum = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.col_seqnum = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.col_desc = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btnSearchDocnum = new System.Windows.Forms.Button();
+            this.btnSearchDate = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dgv)).BeginInit();
             this.SuspendLayout();
             // 
@@ -67,13 +71,14 @@
             dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
             dataGridViewCellStyle2.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
             dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.WhiteSmoke;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.Gainsboro;
             dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.Black;
             this.dgv.RowsDefaultCellStyle = dataGridViewCellStyle2;
             this.dgv.RowTemplate.Height = 25;
             this.dgv.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv.Size = new System.Drawing.Size(843, 404);
             this.dgv.TabIndex = 0;
+            this.dgv.CellPainting += new System.Windows.Forms.DataGridViewCellPaintingEventHandler(this.dgv_CellPainting);
             // 
             // col_id
             // 
@@ -107,9 +112,10 @@
             // 
             this.col_docnum.DataPropertyName = "docnum";
             this.col_docnum.HeaderText = "เลขที่เอกสาร";
-            this.col_docnum.MinimumWidth = 100;
+            this.col_docnum.MinimumWidth = 110;
             this.col_docnum.Name = "col_docnum";
             this.col_docnum.ReadOnly = true;
+            this.col_docnum.Width = 110;
             // 
             // col_seqnum
             // 
@@ -128,11 +134,35 @@
             this.col_desc.Name = "col_desc";
             this.col_desc.ReadOnly = true;
             // 
+            // btnSearchDocnum
+            // 
+            this.btnSearchDocnum.Image = global::Warranty.Properties.Resources.zoom_16;
+            this.btnSearchDocnum.Location = new System.Drawing.Point(426, 8);
+            this.btnSearchDocnum.Name = "btnSearchDocnum";
+            this.btnSearchDocnum.Size = new System.Drawing.Size(25, 23);
+            this.btnSearchDocnum.TabIndex = 2;
+            this.toolTip1.SetToolTip(this.btnSearchDocnum, "ค้นหาตามเลขที่เอกสาร");
+            this.btnSearchDocnum.UseVisualStyleBackColor = true;
+            this.btnSearchDocnum.Click += new System.EventHandler(this.btnSearchDocnum_Click);
+            // 
+            // btnSearchDate
+            // 
+            this.btnSearchDate.Image = global::Warranty.Properties.Resources.zoom_16;
+            this.btnSearchDate.Location = new System.Drawing.Point(77, 8);
+            this.btnSearchDate.Name = "btnSearchDate";
+            this.btnSearchDate.Size = new System.Drawing.Size(25, 23);
+            this.btnSearchDate.TabIndex = 1;
+            this.toolTip1.SetToolTip(this.btnSearchDate, "ค้นหาตามวันที่");
+            this.btnSearchDate.UseVisualStyleBackColor = true;
+            this.btnSearchDate.Click += new System.EventHandler(this.btnSearchDate_Click);
+            // 
             // DialogIslog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(849, 412);
+            this.Controls.Add(this.btnSearchDocnum);
+            this.Controls.Add(this.btnSearchDate);
             this.Controls.Add(this.dgv);
             this.Font = new System.Drawing.Font("Tahoma", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(222)));
             this.KeyPreview = true;
@@ -158,5 +188,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn col_docnum;
         private System.Windows.Forms.DataGridViewTextBoxColumn col_seqnum;
         private System.Windows.Forms.DataGridViewTextBoxColumn col_desc;
+        private System.Windows.Forms.Button btnSearchDate;
+        private System.Windows.Forms.Button btnSearchDocnum;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

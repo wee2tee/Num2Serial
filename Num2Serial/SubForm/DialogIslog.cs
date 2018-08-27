@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.SQLite;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -60,6 +61,68 @@ namespace Warranty.SubForm
             }
 
             return log;
+        }
+
+        private void dgv_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
+        {
+            if(e.RowIndex == -1)
+            {
+                if(((DataGridView)sender).Columns[e.ColumnIndex].Name == this.col_docnum.Name)
+                {
+                    Rectangle rect = ((DataGridView)sender).GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, false);
+                    this.btnSearchDocnum.SetBounds(rect.X + rect.Width - this.btnSearchDocnum.Width, rect.Y + 7, this.btnSearchDocnum.Width, this.btnSearchDocnum.Height);
+                }
+
+                if(((DataGridView)sender).Columns[e.ColumnIndex].Name == this.col_rec_time.Name)
+                {
+                    Rectangle rect = ((DataGridView)sender).GetCellDisplayRectangle(e.ColumnIndex, e.RowIndex, false);
+                    this.btnSearchDate.SetBounds(rect.X + rect.Width - this.btnSearchDate.Width, rect.Y + 7, this.btnSearchDate.Width, this.btnSearchDate.Height);
+                }
+            }
+        }
+
+        private void btnSearchDate_Click(object sender, EventArgs e)
+        {
+            if (this.dgv.CurrentCell == null)
+                return;
+
+            DateTime? cur_dat = this.dgv.Rows.Count == 0 ? null : (DateTime?)this.dgv.Rows[this.dgv.CurrentCell.RowIndex].Cells[this.col_rec_time.Name].Value;
+
+            DialogSearchDate sd = new DialogSearchDate(cur_dat);
+            if(sd.ShowDialog() == DialogResult.OK)
+            {
+                var selected_row = this.dgv.Rows.Cast<DataGridViewRow>().Where(r => ((DateTime?)r.Cells[this.col_rec_time.Name].Value).Value.Date.CompareTo(sd.selected_date.Value.Date) == 0).FirstOrDefault();
+                if (selected_row != null)
+                {
+                    selected_row.Cells[this.col_rec_time.Name].Selected = true;
+                }
+                else
+                {
+                    MessageBox.Show("ค้นหารายการวันที่ " + sd.selected_date.Value.ToString("dd/MM/yy", CultureInfo.GetCultureInfo("Th-th")) + " ไม่พบ");
+                }
+
+                this.dgv.Focus();
+            }
+
+        }
+
+        private void btnSearchDocnum_Click(object sender, EventArgs e)
+        {
+            DialogSearchDocnum sd = new DialogSearchDocnum();
+            if(sd.ShowDialog() == DialogResult.OK)
+            {
+                var selected_row = this.dgv.Rows.Cast<DataGridViewRow>().Where(r => ((string)r.Cells[this.col_docnum.Name].Value).Trim() == sd.docnum.Trim()).FirstOrDefault();
+                if (selected_row != null)
+                {
+                    selected_row.Cells[this.col_docnum.Name].Selected = true;
+                }
+                else
+                {
+                    MessageBox.Show("ค้นหาเอกสารเลขที่ " + sd.docnum.Trim() + " ไม่พบ");
+                }
+
+                this.dgv.Focus();
+            }
         }
     }
 }

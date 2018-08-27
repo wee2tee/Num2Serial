@@ -83,6 +83,18 @@
     <Compile Include="SubForm\DialogIslog.Designer.cs">
       <DependentUpon>DialogIslog.cs</DependentUpon>
     </Compile>
+    <Compile Include="SubForm\DialogSearchDate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForm\DialogSearchDate.Designer.cs">
+      <DependentUpon>DialogSearchDate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SubForm\DialogSearchDocnum.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SubForm\DialogSearchDocnum.Designer.cs">
+      <DependentUpon>DialogSearchDocnum.cs</DependentUpon>
+    </Compile>
     <Compile Include="SubForm\DialogWarranty.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -110,6 +122,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SubForm\DialogIslog.resx">
       <DependentUpon>DialogIslog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForm\DialogSearchDate.resx">
+      <DependentUpon>DialogSearchDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SubForm\DialogSearchDocnum.resx">
+      <DependentUpon>DialogSearchDocnum.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SubForm\DialogWarranty.resx">
       <DependentUpon>DialogWarranty.cs</DependentUpon>

@@ -119,12 +119,5 @@ namespace Warranty.SubForm
         {
             this.btnOK.PerformClick();
         }
-
-        //public static Sccomp GetCompByDataPath(MainForm main_form, string data_path)
-        //{
-        //    var sccomp = DbfTable.Sccomp(main_form.secure_path).Where(s => s.RewriteDataPath() == data_path;
-
-            
-        //}
     }
 }
